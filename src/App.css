@@ -2,7 +2,8 @@
 
 @theme {
   --color-primary: #312eb5;
-  --color-background: #f5f4ff;
+  --color-background: #f9f9ff;
+  --color-background-100: rgba(242, 242, 242, 0.2);
   --color-background-400: rgba(49, 46, 181, 0.09);
   --color-background-500: rgba(26, 0, 0);
   --color-background-700: rgba(82 82 91);
@@ -12,6 +13,7 @@
 .dark {
   --color-primary: #312eb5;
   --color-background: #181818;
+  --color-background-100: rgb(32, 32, 32);
   --color-background-400: rgba(255, 255, 255, 0.06);
   --color-background-500: rgba(255, 255, 255, 0.05);
   --color-background-700: rgb(161, 161, 170);

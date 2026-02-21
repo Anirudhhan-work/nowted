@@ -1,21 +1,8 @@
-import { useContext } from "react";
-import SideBar from "./Components/SideBar";
-import { ThemeContext } from "./context/theme/ThemeContext";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
 
 const App = () => {
-  const context = useContext(ThemeContext);
-
-  if (!context) throw console.error("Some issue with the Theme context");
-
-  const { darkMode } = context;
-
-  return (
-    <div
-      className={`w-full h-screen text-white text-blue ${darkMode && "dark"}`}
-    >
-      <SideBar />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

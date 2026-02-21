@@ -7,7 +7,7 @@ import DarkModeComponent from "../navbar/components/DarkModeComponent";
 
 const SideBar = () => {
   return (
-    <nav className="bg-background w-[18%] py-8 h-screen flex flex-col fixed">
+    <nav className="py-8 h-full flex flex-col">
       <HeadComponent />
       <AddNoteButton />
       <RecentComponent />
