@@ -1,11 +1,16 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ThemeContext } from "./ThemeContext";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const key = "nowted-theme";
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem(key) === "dark" || false;
-  });
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const fetchTheme = () => {
+      setDarkMode(localStorage.getItem(key) === "dark");
+    };
+    fetchTheme();
+  }, []);
 
   const toggleDarkMode = () => {
     if (darkMode) {
