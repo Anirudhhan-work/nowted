@@ -8,9 +8,21 @@ const RecentComponent = () => {
         Recents
       </h3>
       <div className="flex flex-col gap-0.5 py-2">
-        <TabButton icon={FileText} label={"Project proposal"} />
-        <TabButton icon={FileText} label={"Project proposal"} />
-        <TabButton icon={FileText} label={"Project proposal"} />
+        <TabButton
+          path="folder/under maintaince"
+          icon={FileText}
+          label={"Project proposal"}
+        />
+        <TabButton
+          path="folder/under maintaince"
+          icon={FileText}
+          label={"Project proposal"}
+        />
+        <TabButton
+          path="folder/under maintaince"
+          icon={FileText}
+          label={"Project proposal"}
+        />
       </div>
     </section>
   );

@@ -33,9 +33,14 @@ const FolderComponent = () => {
       </div>
 
       <div className="flex flex-col gap-0.5 py-2">
-        <TabButton icon={FolderOpen} label={"Personal"} />
         {folderList.map((folder) => (
-          <TabButton key={folder.id} icon={Folder} label={folder.name} />
+          <TabButton
+            path={`folder/${folder.id}`}
+            key={folder.id}
+            icon={Folder}
+            label={folder.name}
+            activeIcon={FolderOpen}
+          />
         ))}
         {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}
       </div>

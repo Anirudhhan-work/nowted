@@ -8,9 +8,17 @@ const MoreComponent = () => {
         More
       </h3>
       <div className="flex flex-col gap-0.5 py-2">
-        <TabButton icon={Star} label="Favorites" />
-        <TabButton icon={Trash} label="Trash" />
-        <TabButton icon={Archive} label="Archived Notes" />
+        <TabButton
+          path="folder/undermaintaince"
+          icon={Star}
+          label="Favorites"
+        />
+        <TabButton path="folder/undermaintaince" icon={Trash} label="Trash" />
+        <TabButton
+          path="folder/undermaintaince"
+          icon={Archive}
+          label="Archived Notes"
+        />
       </div>
     </section>
   );

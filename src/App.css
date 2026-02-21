@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #312eb5;
+  --color-primary: #3a37df;
   --color-background: #f9f9ff;
   --color-background-100: rgba(242, 242, 242, 0.2);
   --color-background-400: rgba(49, 46, 181, 0.09);
@@ -11,7 +11,7 @@
 }
 
 .dark {
-  --color-primary: #312eb5;
+  --color-primary: #3a37df;
   --color-background: #181818;
   --color-background-100: rgb(32, 32, 32);
   --color-background-400: rgba(255, 255, 255, 0.06);
@@ -27,5 +27,5 @@
 }
 
 .tab-btn {
-  @apply flex items-center gap-4 w-full px-5 py-2.5 text-background-700 cursor-pointer hover:bg-background-400 text-sm font-medium;
+  @apply flex items-center gap-4 w-full px-5 py-2.5 cursor-pointer text-sm font-medium;
 }
