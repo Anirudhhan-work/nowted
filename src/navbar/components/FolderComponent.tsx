@@ -3,17 +3,22 @@ import TabButton from "./TabButton";
 import { useEffect, useState } from "react";
 import { getFolders } from "../../features/folders/folderAPI";
 import type { FolderType } from "../../features/folders/type";
+import TabButtonSkeleton from "../../Components/TabButtonSkeleton";
 
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
+  const [isFolderLoading, setIsFolderLoading] = useState(false);
 
   useEffect(() => {
     const fetchFolders = async () => {
+      setIsFolderLoading(true);
       try {
         const { folders } = await getFolders();
         setFolderList(folders);
       } catch (e) {
         console.error("THIS", e); //TODO: handle errors better
+      } finally {
+        setIsFolderLoading(false);
       }
     };
 
@@ -32,6 +37,7 @@ const FolderComponent = () => {
         {folderList.map((folder) => (
           <TabButton key={folder.id} icon={Folder} label={folder.name} />
         ))}
+        {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}
       </div>
     </section>
   );
