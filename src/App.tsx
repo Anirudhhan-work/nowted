@@ -1,9 +1,9 @@
-import SideNav from "./Components/SideBar";
+import SideBar from "./Components/SideBar";
 
 const App = () => {
   return (
-    <div className="w-full h-screen text-white">
-      <SideNav />
+    <div className="w-full h-screen text-white text-blue dark">
+      <SideBar />
     </div>
   );
 };

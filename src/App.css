@@ -2,8 +2,20 @@
 
 @theme {
   --color-primary: #312eb5;
-  --color-dark: #181818;
-  --color-dark-400: rgba(255, 255, 255, 0.04);
-  --color-dark-500: rgba(255, 255, 255, 0.05);
-  --color-dark-600: rgba(255, 255, 255, 0.6);
+  --color-background: #f5f4ff;
+  --color-background-400: rgba(49, 46, 181, 0.04);
+  --color-background-500: rgba(26, 0, 0);
+  --color-background-700: rgba(82 82 91);
+  --color-background-800: rgba(44, 44, 44);
 }
+
+.dark {
+  --color-primary: #312eb5;
+  --color-background: #181818;
+  --color-background-400: rgba(255, 255, 255, 0.04);
+  --color-background-500: rgba(255, 255, 255, 0.05);
+  --color-background-700: rgb(161, 161, 170);
+  --color-background-800: rgba(255, 255, 255, 0.6);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));

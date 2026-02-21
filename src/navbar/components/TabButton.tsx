@@ -7,7 +7,7 @@ interface TabButtonProps {
 
 const TabButton = ({ label, icon: Icon }: TabButtonProps) => {
   return (
-    <button className="flex items-center gap-4 w-full px-5 py-2 text-zinc-400 cursor-pointer hover:bg-dark-400 text-sm font-medium">
+    <button className="flex items-center gap-4 w-full px-5 py-2.5 text-background-700 cursor-pointer hover:bg-background-400 text-sm font-medium">
       <Icon size={20} />
       {label}
     </button>
