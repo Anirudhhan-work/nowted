@@ -8,7 +8,7 @@ const FolderComponent = () => {
         <h3 className="text-sm font-medium">Folders</h3>
         <FolderPlus size={20} />
       </div>
-      <div className="flex flex-col gap-2 py-2">
+      <div className="flex flex-col gap-0.5 py-2">
         <TabButton icon={FolderOpen} label={"Folder Name"} />
         <TabButton icon={Folder} label={"Folder Name"} />
         <TabButton icon={Folder} label={"Folder Name"} />

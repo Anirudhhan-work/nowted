@@ -3,6 +3,7 @@ import RecentComponent from "../navbar/components/RecentComponent";
 import MoreComponent from "../navbar/components/MoreComponent";
 import AddNoteButton from "../navbar/components/AddNoteButton";
 import HeadComponent from "../navbar/components/HeadComponent";
+import DarkModeComponent from "../navbar/components/DarkModeComponent";
 
 const SideBar = () => {
   return (
@@ -12,6 +13,7 @@ const SideBar = () => {
       <RecentComponent />
       <FolderComponent />
       <MoreComponent />
+      <DarkModeComponent />
     </nav>
   );
 };
