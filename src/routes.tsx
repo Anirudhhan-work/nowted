@@ -6,6 +6,8 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    children: [{ path: "folder/:folderId", element: <NotesPage /> }],
+    children: [
+      { path: "folder/:folderId/:folderName", element: <NotesPage /> },
+    ],
   },
 ]);

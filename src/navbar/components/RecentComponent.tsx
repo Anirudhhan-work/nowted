@@ -16,7 +16,7 @@ const RecentComponent = () => {
         const { recentNotes } = await getResentNotes();
         setRecentNotesList(recentNotes);
       } catch (e) {
-        console.error(e);
+        console.error(e); // TODO: Handle this
       } finally {
         setIsRecentNotesLoading(false);
       }

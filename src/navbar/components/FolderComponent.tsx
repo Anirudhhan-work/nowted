@@ -35,7 +35,7 @@ const FolderComponent = () => {
       <div className="flex flex-col gap-0.5 py-2">
         {folderList.map((folder) => (
           <TabButton
-            path={`folder/${folder.id}`}
+            path={`folder/${folder.id}/${folder.name}`}
             key={folder.id}
             icon={Folder}
             label={folder.name}
