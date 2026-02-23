@@ -32,16 +32,22 @@ const NotesDetails = () => {
   return (
     <section className="p-6 h-screen">
       <h1 className="text-xl font-medium">{folderName}</h1>
-      <div className="py-8 h-full flex flex-col gap-6">
-        {notesList.map((note) => (
-          <NotesCard
-            key={note.id}
-            loading={isLoading}
-            title={note.title}
-            createdAt={note.createdAt}
-            preview={note.preview}
-          />
-        ))}
+      <div className="py-8 flex flex-col gap-6">
+        {notesList.length > 0 ? (
+          notesList.map((note) => (
+            <NotesCard
+              key={note.id}
+              loading={isLoading}
+              title={note.title}
+              createdAt={note.createdAt}
+              preview={note.preview}
+            />
+          ))
+        ) : (
+          <div className="h-10 flex justify-center items-center ">
+            <p className="text-sm text-background-700">Nothing to show</p>
+          </div>
+        )}
       </div>
     </section>
   );

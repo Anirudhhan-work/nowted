@@ -1,13 +1,13 @@
-import Notes from "./components/Notes";
 import NotesDetails from "./components/NotesDetails";
+import NotesTemplate from "./components/NotesTemplate";
 
 const NotesPage = () => {
   return (
     <section className="flex">
-      <div className="bg-background-100 w-[30%] h-screen">
+      <div className="bg-background-100 lg:w-180 w-[30%] h-screen">
         <NotesDetails />
       </div>
-      <Notes />
+      <NotesTemplate />
     </section>
   );
 };
