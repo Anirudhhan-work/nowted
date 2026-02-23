@@ -7,8 +7,7 @@ import NotesCard from "./NotesCard";
 const NotesDetails = () => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { folderId } = useParams();
-  const { folderName } = useParams();
+  const { folderId, folderName } = useParams();
 
   useEffect(() => {
     if (!folderId) return;

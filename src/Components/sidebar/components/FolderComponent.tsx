@@ -30,12 +30,12 @@ const FolderComponent = () => {
 
   return (
     <section className="py-6">
-      <div className="flex justify-between px-5 items-center text-background-800">
+      <div className="flex justify-between px-5 items-center text-background-800 py-2">
         <h3 className="text-sm font-medium">Folders</h3>
         <FolderPlus size={20} />
       </div>
 
-      <div className="flex flex-col gap-0.5 py-2">
+      <div className="flex flex-col gap-0.5 lg:h-[75%] overflow-y-auto scrollbar py-1">
         {folderList.map((folder) => (
           <TabButton
             path={`folder/${folder.id}/${folder.name}`}

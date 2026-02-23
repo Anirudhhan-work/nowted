@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { renameFolder } from "../../../features/folders/folderAPI";
 
 interface TabButtonProps {
@@ -22,6 +22,7 @@ const TabButton = ({
   const [edit, setEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { folderId } = useParams();
+  const navigate = useNavigate();
 
   const handleBlur = async () => {
     if (!folderId) return;
@@ -29,6 +30,7 @@ const TabButton = ({
     if (input.trim() === label) return;
     if (input.trim().length === 0) return console.log("dont send empty");
     const res = await renameFolder(folderId, input);
+    navigate(`/folder/${folderId}/${input}`);
     console.log(res);
     setEdit(false);
   };

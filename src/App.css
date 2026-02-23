@@ -29,3 +29,9 @@
 .tab-btn {
   @apply flex items-center gap-4 w-full px-5 py-2.5 cursor-pointer text-sm font-medium;
 }
+
+.scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.27) var(--color-background);
+  scrollbar-width: thin;
+  background: none;
+}

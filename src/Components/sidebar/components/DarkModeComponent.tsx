@@ -8,7 +8,14 @@ const DarkModeComponent = () => {
   const { darkMode, toggleDarkMode } = context;
   return (
     <section className="flex gap-5 justify-center font-medium mt-auto text-sm">
-      <p className="text-zinc-600 dark:text-white">Light</p>
+      <p
+        className="text-zinc-600 dark:text-white cursor-pointer"
+        onClick={() => {
+          if (darkMode === true) toggleDarkMode();
+        }}
+      >
+        Light
+      </p>
       {darkMode ? (
         <button onClick={toggleDarkMode} className="cursor-pointer">
           <Sun />
@@ -18,7 +25,14 @@ const DarkModeComponent = () => {
           <Moon />
         </button>
       )}
-      <p className="dark:text-zinc-500 text-black">Dark</p>
+      <p
+        className="dark:text-zinc-500 text-black cursor-pointer"
+        onClick={() => {
+          if (darkMode === false) toggleDarkMode();
+        }}
+      >
+        Dark
+      </p>
     </section>
   );
 };
