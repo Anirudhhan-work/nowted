@@ -1,5 +1,5 @@
 import { Moon, Sun } from "lucide-react";
-import { ThemeContext } from "../../context/theme/ThemeContext";
+import { ThemeContext } from "../../../context/theme/ThemeContext";
 import { useContext } from "react";
 
 const DarkModeComponent = () => {

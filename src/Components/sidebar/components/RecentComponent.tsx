@@ -1,9 +1,9 @@
 import { BookOpenIcon, FileText } from "lucide-react";
 import TabButton from "./TabButton";
 import { useEffect, useState } from "react";
-import { getResentNotes } from "../../features/notes/NotesAPI";
-import type { NotesType } from "../../features/notes/type";
-import TabButtonSkeleton from "../../Components/TabButtonSkeleton";
+import { getResentNotes } from "../../../features/notes/NotesAPI";
+import type { NotesType } from "../../../features/notes/type";
+import TabButtonSkeleton from "../../TabButtonSkeleton";
 
 const RecentComponent = () => {
   const [recentNotesList, setRecentNotesList] = useState<NotesType[]>([]);

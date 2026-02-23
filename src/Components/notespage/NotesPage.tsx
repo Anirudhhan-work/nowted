@@ -1,5 +1,5 @@
-import Notes from "../notespage/components/Notes";
-import NotesDetails from "../notespage/components/NotesDetails";
+import Notes from "./components/Notes";
+import NotesDetails from "./components/NotesDetails";
 
 const NotesPage = () => {
   return (

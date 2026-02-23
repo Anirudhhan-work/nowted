@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ThemeContext } from "../context/theme/ThemeContext";
-import SideBar from "./SideBar";
 import { Outlet } from "react-router-dom";
+import SideBar from "./sidebar/SideBar";
 
 const MainLayout = () => {
   const context = useContext(ThemeContext);

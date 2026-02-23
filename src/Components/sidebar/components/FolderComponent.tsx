@@ -1,9 +1,9 @@
 import { Folder, FolderOpen, FolderPlus } from "lucide-react";
 import TabButton from "./TabButton";
 import { useEffect, useState } from "react";
-import { getFolders } from "../../features/folders/folderAPI";
-import type { FolderType } from "../../features/folders/type";
-import TabButtonSkeleton from "../../Components/TabButtonSkeleton";
+import { getFolders } from "../../../features/folders/folderAPI";
+import type { FolderType } from "../../../features/folders/type";
+import TabButtonSkeleton from "../../TabButtonSkeleton";
 
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
-import logo from "../../assets/nowtedlogo.svg";
-import { ThemeContext } from "../../context/theme/ThemeContext";
+import logo from "../../../assets/nowtedlogo.svg";
+import { ThemeContext } from "../../../context/theme/ThemeContext";
 import { useContext } from "react";
 const HeadComponent = () => {
   const context = useContext(ThemeContext);

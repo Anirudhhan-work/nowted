@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { NotesType } from "../../features/notes/type";
-import { getNotesByFolderId } from "../../features/notes/NotesAPI";
+import type { NotesType } from "../../../features/notes/type";
+import { getNotesByFolderId } from "../../../features/notes/NotesAPI";
 import { useParams } from "react-router-dom";
 import NotesCard from "./NotesCard";
 
