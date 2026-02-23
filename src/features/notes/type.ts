@@ -16,3 +16,7 @@ export interface NotesType {
 export interface RecentNotesResType {
   recentNotes: NotesType[];
 }
+
+export interface NotesResType {
+  notes: NotesType[];
+}

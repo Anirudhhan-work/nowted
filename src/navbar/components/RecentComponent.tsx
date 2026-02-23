@@ -3,16 +3,22 @@ import TabButton from "./TabButton";
 import { useEffect, useState } from "react";
 import { getResentNotes } from "../../features/notes/NotesAPI";
 import type { NotesType } from "../../features/notes/type";
+import TabButtonSkeleton from "../../Components/TabButtonSkeleton";
 
 const RecentComponent = () => {
   const [recentNotesList, setRecentNotesList] = useState<NotesType[]>([]);
+  const [isRecentNotesLoading, setIsRecentNotesLoading] = useState(false);
+
   useEffect(() => {
     const fetchRecentNotes = async () => {
+      setIsRecentNotesLoading(true);
       try {
         const { recentNotes } = await getResentNotes();
         setRecentNotesList(recentNotes);
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsRecentNotesLoading(false);
       }
     };
 
@@ -24,6 +30,7 @@ const RecentComponent = () => {
         Recents
       </h3>
       <div className="flex flex-col gap-0.5 py-2">
+        {isRecentNotesLoading && <TabButtonSkeleton Icon={FileText} />}
         {recentNotesList.map((notes) => (
           <TabButton
             key={notes.id}
