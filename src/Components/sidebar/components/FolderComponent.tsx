@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { getFolders } from "../../../features/folders/folderAPI";
 import type { FolderType } from "../../../features/folders/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
+import { useNavigate } from "react-router-dom";
 
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
   const [isFolderLoading, setIsFolderLoading] = useState(false);
+  const navigation = useNavigate();
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -15,6 +17,7 @@ const FolderComponent = () => {
       try {
         const { folders } = await getFolders();
         setFolderList(folders);
+        navigation(`/folder/${folders[0].id}/${folders[0].name}`);
       } catch (e) {
         console.error("THIS", e); //TODO: handle errors better
       } finally {
@@ -23,7 +26,7 @@ const FolderComponent = () => {
     };
 
     fetchFolders();
-  }, []);
+  }, [navigation]);
 
   return (
     <section className="py-6">
@@ -40,6 +43,7 @@ const FolderComponent = () => {
             icon={Folder}
             label={folder.name}
             activeIcon={FolderOpen}
+            editable={true}
           />
         ))}
         {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}

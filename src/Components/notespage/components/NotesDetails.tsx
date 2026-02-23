@@ -17,9 +17,7 @@ const NotesDetails = () => {
       try {
         const { notes } = await getNotesByFolderId(folderId);
         setNotesList(notes);
-        console.log(notes);
       } catch (e) {
-        console.log("fdds ");
         console.log(e, "Error Message"); //TODO: should handle this error
       } finally {
         setIsLoading(false);
