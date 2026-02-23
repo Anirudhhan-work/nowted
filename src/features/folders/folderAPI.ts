@@ -12,3 +12,8 @@ export const renameFolder = async (folderId: string, name: string) => {
   });
   return response.data;
 };
+
+export const createFolder = async (name: string) => {
+  const response = await axiosInstance.post("folders", { name });
+  return response.data;
+};

@@ -29,7 +29,7 @@ const TabButton = ({
 
     if (input.trim() === label) return;
     if (input.trim().length === 0) return console.log("dont send empty");
-    const res = await renameFolder(folderId, input);
+    const res = await renameFolder(folderId, input); //TODO: handle try catch and toast
     navigate(`/folder/${folderId}/${input}`);
     console.log(res);
     setEdit(false);
