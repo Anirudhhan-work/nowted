@@ -1,11 +1,11 @@
-import type { LucideIcon } from "lucide-react";
+import { Loader2, Trash2, type LucideIcon } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import {
   deleteFolder,
   renameFolder,
 } from "../../../features/folders/folderAPI";
-import OpenModal from "../../OpenModal";
+import toast from "react-hot-toast";
 
 interface TabButtonProps {
   path: string;
@@ -26,11 +26,10 @@ const TabButton = ({
 }: TabButtonProps) => {
   const [input, setInput] = useState(label);
   const [edit, setEdit] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { folderId } = useParams();
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [xy, setXy] = useState([0, 0]);
 
   const handleBlur = async () => {
     if (!folderId) return;
@@ -52,33 +51,33 @@ const TabButton = ({
   };
 
   const handleDeleteFolder = async () => {
-    if (!folderId) return console.log("invalid folder id"); //TODO: ADD toast and try catch
-    const res = await deleteFolder(folderId);
-    reloadData?.();
-    console.log(res);
+    if (!folderId) return toast.error("Invalid Folder Id");
+    setIsDeleting(true);
+    try {
+      const res = await deleteFolder(folderId);
+      toast.success(res);
+      reloadData?.();
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
-  const setModal = (e: MouseEvent) => {
-    e.preventDefault();
-    setXy([e.pageX, e.pageY]);
-    setIsModalOpen(true);
-  };
   return (
     <NavLink
       to={path}
       onDoubleClick={handleDoubleClick}
       className={({ isActive }) =>
-        `tab-btn ${isActive ? "bg-primary rounded-sm text-white" : "hover:bg-background-400 text-background-700"}`
+        `tab-btn group ${isActive ? "bg-primary rounded-sm text-white" : "hover:bg-background-400 text-background-700"}`
       }
-      onContextMenu={(e) => {
-        setModal(e);
-      }}
     >
       {({ isActive }) => (
         <>
-          {isModalOpen && (
-            <OpenModal x={xy[0]} y={xy[1]} handleDelete={handleDeleteFolder} />
-          )}
           {isActive && ActiveIcon ? (
             <ActiveIcon size={20} />
           ) : (
@@ -99,7 +98,19 @@ const TabButton = ({
               onChange={(e) => setInput(e.target.value)}
             />
           ) : (
-            <p>{input}</p>
+            <span className="flex justify-between w-full items-center">
+              <p>{input}</p>
+              {editable && !isDeleting && (
+                <Trash2
+                  size={17}
+                  className="group-hover:block hover:text-red-500 hidden"
+                  onClick={handleDeleteFolder}
+                />
+              )}
+              {isDeleting && (
+                <Loader2 size={20} className="animate-spin text-red-500" />
+              )}
+            </span>
           )}
         </>
       )}

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Outlet } from "react-router-dom";
 import SideBar from "./sidebar/SideBar";
+import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   const context = useContext(ThemeContext);
@@ -20,6 +21,7 @@ const MainLayout = () => {
       <div className="overflow-y-auto w-[82%]">
         <Outlet />
       </div>
+      <Toaster position="bottom-right" />
     </div>
   );
 };

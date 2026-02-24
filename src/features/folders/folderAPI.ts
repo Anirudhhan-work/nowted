@@ -14,11 +14,11 @@ export const renameFolder = async (folderId: string, name: string) => {
 };
 
 export const createFolder = async (name: string) => {
-  const response = await axiosInstance.post("folders", { name });
+  const response = await axiosInstance.post<string>("folders", { name });
   return response.data;
 };
 
 export const deleteFolder = async (folderId: string) => {
-  const response = await axiosInstance.delete(`folders/${folderId}`);
+  const response = await axiosInstance.delete<string>(`folders/${folderId}`);
   return response.data;
 };

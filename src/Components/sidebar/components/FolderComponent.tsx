@@ -46,7 +46,7 @@ const FolderComponent = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-0.5 lg:h-[75%] overflow-y-auto scrollbar py-1">
+      <div className="flex flex-col gap-0.5 lg:h-52 overflow-y-auto scrollbar py-1">
         {folderList.map((folder) => (
           <TabButton
             path={`folder/${folder.id}/${folder.name}`}

@@ -1,3 +1,5 @@
+import type { AxiosError } from "axios";
+
 export interface FolderType {
   id: string;
   name: string;
@@ -8,4 +10,9 @@ export interface FolderType {
 
 export interface FolderResType {
   folders: FolderType[];
+}
+
+export interface ErrorType extends AxiosError {
+  error: string;
+  message: string;
 }
