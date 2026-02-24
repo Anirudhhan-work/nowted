@@ -3,8 +3,8 @@ import NotesTemplate from "./components/NotesTemplate";
 
 const NotesPage = () => {
   return (
-    <section className="flex">
-      <div className="bg-background-100 lg:w-180 w-[30%] h-screen">
+    <section className="flex h-screen overflow-hidden">
+      <div className="bg-background-100 lg:w-180 w-[30%] h-screen overflow-y-auto scrollbar">
         <NotesDetails />
       </div>
       <NotesTemplate />

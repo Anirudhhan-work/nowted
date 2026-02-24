@@ -31,7 +31,7 @@
 }
 
 .scrollbar {
-  scrollbar-color: rgba(255, 255, 255, 0.27) var(--color-background);
+  scrollbar-color: rgba(255, 255, 255, 0.111) var(--color-background);
   scrollbar-width: thin;
   background: none;
 }
