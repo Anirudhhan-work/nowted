@@ -21,3 +21,8 @@ export const getNoteById = async (noteId: string) => {
   const res = await axiosInstance.get<SingleNoteResType>(`notes/${noteId}`);
   return res.data;
 };
+
+export const deleteNoteById = async (noteId: string) => {
+  const res = await axiosInstance.delete<string>(`notes/${noteId}`);
+  return res.data;
+};

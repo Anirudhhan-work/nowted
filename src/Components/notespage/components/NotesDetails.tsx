@@ -10,23 +10,24 @@ const NotesDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { folderId, folderName } = useParams();
 
+  const fetchNotesByFolderId = async (folderId: string) => {
+    setIsLoading(true);
+    try {
+      const { notes } = await getNotesByFolderId(folderId);
+      setNotesList(notes);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!folderId) return;
-    const fetchNotesByFolderId = async (folderId: string) => {
-      setIsLoading(true);
-      try {
-        const { notes } = await getNotesByFolderId(folderId);
-        setNotesList(notes);
-      } catch (e) {
-        if (e instanceof Error) {
-          toast.error(e.message);
-        } else {
-          toast.error("Something went wrong");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     fetchNotesByFolderId(folderId);
   }, [folderId]);
@@ -40,10 +41,12 @@ const NotesDetails = () => {
             <NotesCard
               path={`note/${note.id}`}
               key={note.id}
+              id={note.id}
               loading={isLoading}
               title={note.title}
               createdAt={note.createdAt}
               preview={note.preview}
+              reload={() => folderId && fetchNotesByFolderId(folderId)}
             />
           ))
         ) : (

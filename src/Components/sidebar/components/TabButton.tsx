@@ -39,7 +39,7 @@ const TabButton = ({
     try {
       const res = await renameFolder(folderId, input);
       toast.success(res);
-      navigate(`/folder/${folderId}/${input}`);
+      navigate(`/${input}/${folderId}`);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
