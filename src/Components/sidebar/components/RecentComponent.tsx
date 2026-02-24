@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getResentNotes } from "../../../features/notes/NotesAPI";
 import type { NotesType } from "../../../features/notes/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
+import toast from "react-hot-toast";
 
 const RecentComponent = () => {
   const [recentNotesList, setRecentNotesList] = useState<NotesType[]>([]);
@@ -16,7 +17,11 @@ const RecentComponent = () => {
         const { recentNotes } = await getResentNotes();
         setRecentNotesList(recentNotes);
       } catch (e) {
-        console.error(e); // TODO: Handle this
+        if (e instanceof Error) {
+          toast.error(e.message);
+        } else {
+          toast.error("Something went wrong");
+        }
       } finally {
         setIsRecentNotesLoading(false);
       }

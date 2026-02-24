@@ -35,11 +35,20 @@ const TabButton = ({
     if (!folderId) return;
 
     if (input.trim() === label) return;
-    if (input.trim().length === 0) return console.log("dont send empty");
-    const res = await renameFolder(folderId, input); //TODO: handle try catch and toast
-    navigate(`/folder/${folderId}/${input}`);
-    console.log(res);
-    setEdit(false);
+    if (input.trim().length === 0) return;
+    try {
+      const res = await renameFolder(folderId, input);
+      toast.success(res);
+      navigate(`/folder/${folderId}/${input}`);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setEdit(false);
+    }
   };
 
   const handleDoubleClick = (e: MouseEvent) => {
@@ -57,7 +66,7 @@ const TabButton = ({
       const res = await deleteFolder(folderId);
       toast.success(res);
       reloadData?.();
-    } catch (e: unknown) {
+    } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
       } else {

@@ -5,6 +5,7 @@ import { createFolder, getFolders } from "../../../features/folders/folderAPI";
 import type { FolderType } from "../../../features/folders/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
@@ -18,7 +19,11 @@ const FolderComponent = () => {
       setFolderList(folders);
       navigation(`/folder/${folders[0].id}/${folders[0].name}`);
     } catch (e) {
-      console.error("THIS", e); //TODO: handle errors better
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
       setIsFolderLoading(false);
     }
@@ -29,10 +34,18 @@ const FolderComponent = () => {
   }, []);
 
   const handleCreateFolder = async () => {
-    const res = await createFolder("Untitled0"); // TODO: handle try catch and toast
-    await fetchFolders();
-    fetchFolders();
-    console.log(res);
+    try {
+      const res = await createFolder("Untitled0");
+      toast.success(res);
+      await fetchFolders();
+      fetchFolders();
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
   };
 
   return (

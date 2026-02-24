@@ -3,6 +3,7 @@ import type { NotesType } from "../../../features/notes/type";
 import { getNotesByFolderId } from "../../../features/notes/NotesAPI";
 import { useParams } from "react-router-dom";
 import NotesCard from "./NotesCard";
+import toast from "react-hot-toast";
 
 const NotesDetails = () => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
@@ -17,7 +18,11 @@ const NotesDetails = () => {
         const { notes } = await getNotesByFolderId(folderId);
         setNotesList(notes);
       } catch (e) {
-        console.log(e, "Error Message"); //TODO: should handle this error
+        if (e instanceof Error) {
+          toast.error(e.message);
+        } else {
+          toast.error("Something went wrong");
+        }
       } finally {
         setIsLoading(false);
       }
