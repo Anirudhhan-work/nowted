@@ -17,3 +17,8 @@ export const createFolder = async (name: string) => {
   const response = await axiosInstance.post("folders", { name });
   return response.data;
 };
+
+export const deleteFolder = async (folderId: string) => {
+  const response = await axiosInstance.delete(`folders/${folderId}`);
+  return response.data;
+};

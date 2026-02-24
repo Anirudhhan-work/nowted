@@ -1,7 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { renameFolder } from "../../../features/folders/folderAPI";
+import {
+  deleteFolder,
+  renameFolder,
+} from "../../../features/folders/folderAPI";
+import OpenModal from "../../OpenModal";
 
 interface TabButtonProps {
   path: string;
@@ -9,6 +13,7 @@ interface TabButtonProps {
   icon: LucideIcon;
   activeIcon?: LucideIcon;
   editable?: boolean;
+  reloadData?: () => void;
 }
 
 const TabButton = ({
@@ -17,12 +22,15 @@ const TabButton = ({
   icon: Icon,
   activeIcon: ActiveIcon,
   editable = false,
+  reloadData,
 }: TabButtonProps) => {
   const [input, setInput] = useState(label);
   const [edit, setEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { folderId } = useParams();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [xy, setXy] = useState([0, 0]);
 
   const handleBlur = async () => {
     if (!folderId) return;
@@ -42,6 +50,19 @@ const TabButton = ({
       inputRef.current?.focus();
     }, 0);
   };
+
+  const handleDeleteFolder = async () => {
+    if (!folderId) return console.log("invalid folder id"); //TODO: ADD toast and try catch
+    const res = await deleteFolder(folderId);
+    reloadData?.();
+    console.log(res);
+  };
+
+  const setModal = (e: MouseEvent) => {
+    e.preventDefault();
+    setXy([e.pageX, e.pageY]);
+    setIsModalOpen(true);
+  };
   return (
     <NavLink
       to={path}
@@ -49,9 +70,15 @@ const TabButton = ({
       className={({ isActive }) =>
         `tab-btn ${isActive ? "bg-primary rounded-sm text-white" : "hover:bg-background-400 text-background-700"}`
       }
+      onContextMenu={(e) => {
+        setModal(e);
+      }}
     >
       {({ isActive }) => (
         <>
+          {isModalOpen && (
+            <OpenModal x={xy[0]} y={xy[1]} handleDelete={handleDeleteFolder} />
+          )}
           {isActive && ActiveIcon ? (
             <ActiveIcon size={20} />
           ) : (

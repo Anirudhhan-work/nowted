@@ -55,6 +55,7 @@ const FolderComponent = () => {
             label={folder.name}
             activeIcon={FolderOpen}
             editable={true}
+            reloadData={fetchFolders}
           />
         ))}
         {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}
