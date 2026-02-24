@@ -32,7 +32,7 @@ const NotesDetails = () => {
   }, [folderId]);
 
   return (
-    <section className="p-6 h-screen">
+    <section className="p-6 h-screen bg-background-100">
       <h1 className="text-xl font-medium">{folderName}</h1>
       <div className="py-8 flex flex-col gap-6">
         {notesList.length > 0 ? (
