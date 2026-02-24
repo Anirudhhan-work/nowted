@@ -4,20 +4,21 @@ import { useEffect, useState } from "react";
 import { createFolder, getFolders } from "../../../features/folders/folderAPI";
 import type { FolderType } from "../../../features/folders/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
   const [isFolderLoading, setIsFolderLoading] = useState(false);
   const navigation = useNavigate();
+  const { folderName } = useParams();
 
   const fetchFolders = async () => {
     setIsFolderLoading(true);
     try {
       const { folders } = await getFolders();
       setFolderList(folders);
-      if (folders[0].name && folders[0].id) {
+      if (folders[0].name && folders[0].id && !folderName) {
         navigation(`/${folders[0].name}/${folders[0].id}`);
       }
     } catch (e) {

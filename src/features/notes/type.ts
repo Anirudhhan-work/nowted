@@ -8,6 +8,7 @@ export interface NotesType {
   isArchived: boolean;
   createdAt: string;
   updatedAt: string;
+  content: string;
   deletedAt: null | string;
   preview: string;
   folder: FolderType;
@@ -19,4 +20,8 @@ export interface RecentNotesResType {
 
 export interface NotesResType {
   notes: NotesType[];
+}
+
+export interface SingleNoteResType {
+  note: NotesType;
 }
