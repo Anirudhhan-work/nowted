@@ -65,7 +65,7 @@ const NotesCard = ({
     <NavLink
       to={path}
       className={({ isActive }) =>
-        `shadow-lg p-4 bg-background-400 rounded-sm group ${isActive ? "dark:shadow-white/10 shadow-black/20" : ""}`
+        `shadow-lg p-4 rounded-sm group ${isActive ? "dark:shadow-white/10 shadow-black/20 bg-background-700/10" : "bg-background-400  "}`
       }
     >
       <div className="flex justify-between items-center">
