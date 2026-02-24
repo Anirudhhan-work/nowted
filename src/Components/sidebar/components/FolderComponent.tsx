@@ -17,7 +17,9 @@ const FolderComponent = () => {
     try {
       const { folders } = await getFolders();
       setFolderList(folders);
-      navigation(`/folder/${folders[0].id}/${folders[0].name}`);
+      if (folders[0].name && folders[0].id) {
+        navigation(`/${folders[0].name}/${folders[0].id}`);
+      }
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -62,7 +64,7 @@ const FolderComponent = () => {
       <div className="flex flex-col gap-0.5 lg:h-52 overflow-y-auto scrollbar py-1">
         {folderList.map((folder) => (
           <TabButton
-            path={`folder/${folder.id}/${folder.name}`}
+            path={`${folder.name}/${folder.id}`}
             key={folder.id}
             icon={Folder}
             label={folder.name}

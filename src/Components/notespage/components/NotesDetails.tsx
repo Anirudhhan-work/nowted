@@ -38,6 +38,7 @@ const NotesDetails = () => {
         {notesList.length > 0 ? (
           notesList.map((note) => (
             <NotesCard
+              path={`note/${note.id}`}
               key={note.id}
               loading={isLoading}
               title={note.title}

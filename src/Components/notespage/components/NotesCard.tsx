@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 const NotesDetailsSkeleton = () => {
   return (
     <div className="p-4 h-25 bg-background-400 rounded-sm">
@@ -15,22 +17,24 @@ const NotesCard = ({
   createdAt,
   preview,
   loading,
+  path,
 }: {
   title: string;
   createdAt: string;
   preview: string;
   loading: boolean;
+  path: string;
 }) => {
   if (loading) return <NotesDetailsSkeleton />;
   const date = new Date(createdAt);
   return (
-    <div className="p-4 bg-background-400 rounded-sm">
+    <NavLink to={path} className="p-4 bg-background-400 rounded-sm">
       <h3 className="font-medium text-lg">{title}</h3>
       <div className="py-2 flex gap-2 text-sm">
         <p className="text-background-700/70">{date.toLocaleDateString()}</p>
         <p className="text-background-800 truncate">{preview}</p>
       </div>
-    </div>
+    </NavLink>
   );
 };
 

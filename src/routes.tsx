@@ -1,13 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./Components/MainLayout";
 import NotesPage from "./Components/notespage/NotesPage";
+import NotesComponent from "./Components/NotesComponent/NotesComponent";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
-      { path: "folder/:folderId/:folderName", element: <NotesPage /> },
+      {
+        path: ":folderName/:folderId/",
+        element: <NotesPage />,
+        children: [{ path: "note/:noteId/", element: <NotesComponent /> }],
+      },
     ],
   },
 ]);
