@@ -1,8 +1,9 @@
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Star, Trash2 } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { deleteNoteById } from "../../../features/notes/NotesAPI";
+import { deleteNoteById, patchNote } from "../../../features/notes/NotesAPI";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import type { NotesType } from "../../../features/notes/type";
 
 const NotesDetailsSkeleton = () => {
   return (
@@ -17,25 +18,23 @@ const NotesDetailsSkeleton = () => {
 };
 
 const NotesCard = ({
-  title,
-  createdAt,
-  preview,
+  note,
   loading,
   path,
-  id,
   reload,
 }: {
-  title: string;
-  createdAt: string;
-  preview: string;
+  note: NotesType;
   loading: boolean;
   path: string;
-  id: string;
   reload?: (noteId: string) => void;
 }) => {
   const [isNoteDeleting, setIsNoteDeleting] = useState(false);
   const { folderName, folderId, category } = useParams();
   const navigate = useNavigate();
+  const { id, title, createdAt, preview, isFavorite, content, isArchived } =
+    note;
+  const [isFav, setIsFav] = useState(isFavorite);
+  const [favLoading, setFavLoading] = useState(false);
   if (loading) return <NotesDetailsSkeleton />;
 
   const handleDeleteNoteById = async () => {
@@ -60,6 +59,28 @@ const NotesCard = ({
       setIsNoteDeleting(false);
     }
   };
+
+  const toggleFav = async () => {
+    setFavLoading(true);
+    try {
+      const res = await patchNote(
+        id,
+        folderId ? folderId : note.folderId,
+        title,
+        content,
+        !isFav,
+        isArchived,
+      );
+      setIsFav((prev) => !prev);
+      toast.success(res);
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message);
+      else toast.error("Something went wrong");
+    } finally {
+      setFavLoading(false);
+    }
+  };
+
   const date = new Date(createdAt);
   return (
     <NavLink
@@ -73,11 +94,27 @@ const NotesCard = ({
         {isNoteDeleting ? (
           <Loader2 size={20} className="hover:text-red-500 animate-spin" />
         ) : (
-          <Trash2
-            size={20}
-            className="hover:text-red-500 hidden group-hover:block"
-            onClick={handleDeleteNoteById}
-          />
+          <div className="flex gap-5 items-center">
+            <Trash2
+              size={20}
+              className="hover:text-red-500 hidden group-hover:block"
+              onClick={handleDeleteNoteById}
+            />
+            {isFav ? (
+              <Star
+                size={17}
+                fill="var(--color-color)"
+                onClick={toggleFav}
+                className={`${favLoading && "animate-pulse"}`}
+              />
+            ) : (
+              <Star
+                size={17}
+                onClick={toggleFav}
+                className={`${favLoading && "animate-pulse"}`}
+              />
+            )}
+          </div>
         )}
       </div>
       <div className="py-2 flex gap-2 text-sm">

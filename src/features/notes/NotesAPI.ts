@@ -33,3 +33,21 @@ export const getNotesByCategory = async (category: string) => {
   });
   return res.data;
 };
+
+export const patchNote = async (
+  noteId: string,
+  folderId: string,
+  title: string,
+  content: string,
+  isFavorite: boolean,
+  isArchived: boolean,
+) => {
+  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
+    folderId,
+    title,
+    content,
+    isFavorite,
+    isArchived,
+  });
+  return res.data;
+};
