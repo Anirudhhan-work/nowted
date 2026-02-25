@@ -3,6 +3,7 @@ import {
   type SingleNoteResType,
   type NotesResType,
   type RecentNotesResType,
+  type CreateNoteType,
 } from "./type";
 
 export const getResentNotes = async () => {
@@ -31,6 +32,24 @@ export const getNotesByCategory = async (category: string) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
     params: { [category]: true },
   });
+  return res.data;
+};
+
+export const createNote = async (
+  folderId: string,
+  title: string,
+  content: string,
+  isFavorite: boolean,
+  isArchived: boolean,
+) => {
+  const res = await axiosInstance.post<CreateNoteType>(`notes`, {
+    folderId,
+    title,
+    content,
+    isFavorite,
+    isArchived,
+  });
+
   return res.data;
 };
 

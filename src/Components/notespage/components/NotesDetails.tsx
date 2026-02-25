@@ -10,11 +10,11 @@ import toast from "react-hot-toast";
 
 const NotesDetails = () => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [IsNoteLoading, setIsNoteLoading] = useState(false);
   const { folderId, folderName, category } = useParams();
 
   const fetchNotesByFolderId = async (folderId: string) => {
-    setIsLoading(true);
+    setIsNoteLoading(true);
     try {
       const { notes } = await getNotesByFolderId(folderId);
       setNotesList(notes);
@@ -25,12 +25,12 @@ const NotesDetails = () => {
         toast.error("Something went wrong");
       }
     } finally {
-      setIsLoading(false);
+      setIsNoteLoading(false);
     }
   };
 
   const fetchNotesByCategory = async (category: string) => {
-    setIsLoading(true);
+    setIsNoteLoading(true);
     try {
       const { notes } = await getNotesByCategory(category);
       setNotesList(notes);
@@ -41,15 +41,13 @@ const NotesDetails = () => {
         toast.error("something went wrong");
       }
     } finally {
-      setIsLoading(false);
+      setIsNoteLoading(false);
     }
   };
 
   useEffect(() => {
     if (category) fetchNotesByCategory(category);
-    if (!folderId) return;
-
-    fetchNotesByFolderId(folderId);
+    if (folderId) fetchNotesByFolderId(folderId);
   }, [folderId, category]);
 
   return (
@@ -62,7 +60,7 @@ const NotesDetails = () => {
               key={note.id}
               note={note}
               path={`note/${note.id}`}
-              loading={isLoading}
+              loading={IsNoteLoading}
               reload={() =>
                 (folderId && fetchNotesByFolderId(folderId)) ||
                 (category && fetchNotesByCategory(category))

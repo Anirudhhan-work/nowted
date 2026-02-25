@@ -25,3 +25,7 @@ export interface NotesResType {
 export interface SingleNoteResType {
   note: NotesType;
 }
+
+export interface CreateNoteType {
+  id: string;
+}
