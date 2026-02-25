@@ -32,6 +32,10 @@
   @apply flex items-center gap-4 w-full px-5 py-2.5 cursor-pointer text-sm font-medium;
 }
 
+.add-btn {
+  @apply flex gap-5 font-medium justify-center items-center bg-background-500 w-full rounded-xs py-3 cursor-pointer dark:hover:bg-zinc-700/50 hover:bg-zinc-800 transition duration-200;
+}
+
 .modal-item {
   @apply flex gap-6 items-center w-full px-3 py-2 cursor-pointer;
 }

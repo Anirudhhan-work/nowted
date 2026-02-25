@@ -3,16 +3,19 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { createNote } from "../../../features/notes/NotesAPI";
 import { NoteContext } from "../../../context/Notes/NoteContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const AddNoteButton = () => {
   const { folderId, folderName } = useParams();
+  const [isNoteAdding, setIsNoteAdding] = useState(false);
   const navigate = useNavigate();
   const context = useContext(NoteContext);
   if (!context) return toast.error("Some issue with the Note context");
   const { reRenderMidById } = context;
+
   const fetchCreateNote = async () => {
     if (!folderId || !folderName) return toast.error("Please select a folder");
+    setIsNoteAdding(true);
 
     try {
       const res = await createNote(folderId, "", "", false, false);
@@ -22,6 +25,8 @@ const AddNoteButton = () => {
     } catch (e) {
       if (e instanceof Error) toast.error(e.message);
       else toast.error("Something went wrong");
+    } finally {
+      setIsNoteAdding(false);
     }
   };
 
@@ -29,7 +34,7 @@ const AddNoteButton = () => {
     <section className="flex justify-center py-8 px-5 text-white">
       <button
         onClick={fetchCreateNote}
-        className="flex gap-5 font-medium text-md justify-center items-center bg-background-500 w-full rounded-xs py-3 cursor-pointer dark:hover:bg-zinc-700/50 hover:bg-zinc-800 transition duration-200"
+        className={`add-btn ${isNoteAdding && "animate-pulse"}`}
       >
         <Plus /> New Note
       </button>
