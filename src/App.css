@@ -32,6 +32,9 @@
   @apply flex items-center gap-4 w-full px-5 py-2.5 cursor-pointer text-sm font-medium;
 }
 
+.modal-item {
+  @apply flex gap-6 items-center w-full px-3 py-2 cursor-pointer;
+}
 .scrollbar {
   scrollbar-color: rgba(255, 255, 255, 0.111) var(--color-background);
   scrollbar-width: thin;

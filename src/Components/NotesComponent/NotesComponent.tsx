@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { getNoteById } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
+import OpenModal from "../OpenModal";
 
 const NotesComponent = () => {
   const { noteId } = useParams();
@@ -27,13 +28,28 @@ const NotesComponent = () => {
     fetchFolder();
   }, [noteId]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="p-12 w-full overflow-y-auto scrollbar">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-medium">{singleNote?.title}</h1>
-        <button className="p-1 border rounded-full border-background-700 text-background-700 cursor-pointer">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsModalOpen((prev) => !prev);
+          }}
+          className="p-1 border rounded-full border-background-700 text-background-700 cursor-pointer"
+        >
           <Ellipsis />
         </button>
+
+        {isModalOpen && (
+          <OpenModal
+            handleDelete={() => {}}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
       </div>
       <div className="flex items-center gap-20 pt-10 pb-4">
         <div className="text-background-700 flex items-center gap-5">
@@ -55,6 +71,7 @@ const NotesComponent = () => {
         </p>
       </div>
       <p>{singleNote?.content}</p>
+      <div className="relative"></div>
     </section>
   );
 };

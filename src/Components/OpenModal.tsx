@@ -1,29 +1,46 @@
-import { Edit, Trash2 } from "lucide-react";
+import { Archive, Star, Trash } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const OpenModal = ({
-  x,
-  y,
   handleDelete,
+  onClose,
 }: {
-  x: number;
-  y: number;
   handleDelete: () => void;
+  onClose: () => void;
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
   return (
     <div
-      className="w-30  dark:bg-background-100  bg-zinc-200 p-4 absolute rounded-sm"
-      style={{ top: `${y}px`, left: `${x}px` }}
+      ref={modalRef}
+      className="absolute right-13 top-22 mt-2 w-60 bg-zinc-200 dark:bg-background-100 rounded-md shadow-lg p-2 z-50"
     >
-      <button className="flex justify-between items-center hover:text-primary">
-        <p>Edit</p>
-        <Edit size={15} />
+      <button className="modal-item">
+        <Star size={20} />
+        <span>Add to favorites</span>
       </button>
-      <button
-        className="flex w-full justify-between items-center hover:text-red-400 cursor-pointer"
-        onClick={handleDelete}
-      >
-        <p>Delete</p>
-        <Trash2 size={15} />
+      <button className="modal-item">
+        <Archive size={20} />
+        <span>Archived</span>
+      </button>
+      <hr className="border-01 border-background-700/10 mt-4 mb-4" />
+      <button onClick={handleDelete} className="modal-item">
+        <Trash size={20} />
+        <span>Delete</span>
       </button>
     </div>
   );
