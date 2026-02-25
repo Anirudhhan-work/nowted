@@ -9,9 +9,14 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: ":folderName/:folderId/",
+        path: ":folderName/:folderId",
         element: <NotesPage />,
-        children: [{ path: "note/:noteId/", element: <NotesComponent /> }],
+        children: [{ path: "note/:noteId", element: <NotesComponent /> }],
+      },
+      {
+        path: ":category",
+        element: <NotesPage />,
+        children: [{ path: "note/:noteId", element: <NotesComponent /> }],
       },
     ],
   },

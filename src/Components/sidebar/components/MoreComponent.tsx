@@ -1,4 +1,4 @@
-import { Archive, Star, Trash } from "lucide-react";
+import { Archive, PackageOpen, Star, Trash } from "lucide-react";
 import TabButton from "./TabButton";
 
 const MoreComponent = () => {
@@ -8,14 +8,11 @@ const MoreComponent = () => {
         More
       </h3>
       <div className="flex flex-col gap-0.5 py-2">
+        <TabButton path="favorite" icon={Star} label="Favorites" />
+        <TabButton path="deleted" icon={Trash} label="Trash" />
         <TabButton
-          path="folder/undermaintaince"
-          icon={Star}
-          label="Favorites"
-        />
-        <TabButton path="folder/undermaintaince" icon={Trash} label="Trash" />
-        <TabButton
-          path="folder/undermaintaince"
+          path="archived"
+          activeIcon={PackageOpen}
           icon={Archive}
           label="Archived Notes"
         />

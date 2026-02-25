@@ -26,3 +26,10 @@ export const deleteNoteById = async (noteId: string) => {
   const res = await axiosInstance.delete<string>(`notes/${noteId}`);
   return res.data;
 };
+
+export const getNotesByCategory = async (category: string) => {
+  const res = await axiosInstance.get<NotesResType>("notes", {
+    params: { [category]: true },
+  });
+  return res.data;
+};

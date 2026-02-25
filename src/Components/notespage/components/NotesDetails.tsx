@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { NotesType } from "../../../features/notes/type";
-import { getNotesByFolderId } from "../../../features/notes/NotesAPI";
+import {
+  getNotesByCategory,
+  getNotesByFolderId,
+} from "../../../features/notes/NotesAPI";
 import { useParams } from "react-router-dom";
 import NotesCard from "./NotesCard";
 import toast from "react-hot-toast";
@@ -8,7 +11,7 @@ import toast from "react-hot-toast";
 const NotesDetails = () => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { folderId, folderName } = useParams();
+  const { folderId, folderName, category } = useParams();
 
   const fetchNotesByFolderId = async (folderId: string) => {
     setIsLoading(true);
@@ -26,15 +29,32 @@ const NotesDetails = () => {
     }
   };
 
+  const fetchNotesByCategory = async (category: string) => {
+    setIsLoading(true);
+    try {
+      const { notes } = await getNotesByCategory(category);
+      setNotesList(notes);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("something went wrong");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
+    if (category) fetchNotesByCategory(category);
     if (!folderId) return;
 
     fetchNotesByFolderId(folderId);
-  }, [folderId]);
+  }, [folderId, category]);
 
   return (
-    <section className="p-6 h-screen bg-background-100">
-      <h1 className="text-xl font-medium">{folderName}</h1>
+    <section className="p-6 min-h-screen bg-background-100">
+      <h1 className="text-xl font-medium">{folderName || category}</h1>
       <div className="py-8 flex flex-col gap-6">
         {notesList.length > 0 ? (
           notesList.map((note) => (
@@ -46,7 +66,10 @@ const NotesDetails = () => {
               title={note.title}
               createdAt={note.createdAt}
               preview={note.preview}
-              reload={() => folderId && fetchNotesByFolderId(folderId)}
+              reload={() =>
+                (folderId && fetchNotesByFolderId(folderId)) ||
+                (category && fetchNotesByCategory(category))
+              }
             />
           ))
         ) : (

@@ -11,14 +11,14 @@ const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
   const [isFolderLoading, setIsFolderLoading] = useState(false);
   const navigation = useNavigate();
-  const { folderName } = useParams();
+  const { folderName, category } = useParams();
 
   const fetchFolders = async () => {
     setIsFolderLoading(true);
     try {
       const { folders } = await getFolders();
       setFolderList(folders);
-      if (folders[0].name && folders[0].id && !folderName) {
+      if (folders[0].name && folders[0].id && !folderName && !category) {
         navigation(`/${folders[0].name}/${folders[0].id}`);
       }
     } catch (e) {

@@ -34,20 +34,20 @@ const NotesCard = ({
   reload?: (noteId: string) => void;
 }) => {
   const [isNoteDeleting, setIsNoteDeleting] = useState(false);
-  const { folderName, folderId } = useParams();
+  const { folderName, folderId, category } = useParams();
   const navigate = useNavigate();
   if (loading) return <NotesDetailsSkeleton />;
 
-  const handleDeleteNoteById = async (e: React.MouseEvent<SVGSVGElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!folderName || !folderId) return;
-
+  const handleDeleteNoteById = async () => {
     try {
       setIsNoteDeleting(true);
       const res = await deleteNoteById(id);
-      navigate(`/${folderName}/${folderId}`);
+      if (folderName || folderId) {
+        navigate(`/${folderName}/${folderId}`);
+      }
+      if (category) {
+        navigate(`/${category}`);
+      }
       reload?.(id);
       toast.success(res);
     } catch (e) {
