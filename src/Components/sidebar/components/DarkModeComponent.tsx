@@ -1,10 +1,11 @@
 import { Moon, Sun } from "lucide-react";
 import { ThemeContext } from "../../../context/theme/ThemeContext";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 
 const DarkModeComponent = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw console.error("Some issue with the Theme context");
+  if (!context) return toast.error("Some issue with the Theme context");
   const { darkMode, toggleDarkMode } = context;
   return (
     <section className="flex gap-5 justify-center font-medium mt-auto text-sm">

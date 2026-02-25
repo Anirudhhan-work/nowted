@@ -2,15 +2,21 @@ import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { createNote } from "../../../features/notes/NotesAPI";
+import { NoteContext } from "../../../context/Notes/NoteContext";
+import { useContext } from "react";
 
 const AddNoteButton = () => {
   const { folderId, folderName } = useParams();
   const navigate = useNavigate();
+  const context = useContext(NoteContext);
+  if (!context) return toast.error("Some issue with the Note context");
+  const { reRenderMidById } = context;
   const fetchCreateNote = async () => {
     if (!folderId || !folderName) return toast.error("Please select a folder");
 
     try {
       const res = await createNote(folderId, "", "", false, false);
+      reRenderMidById(folderId);
       await navigate(`${folderName}/${folderId}/note/${res.id}`);
       toast.success("Note Created Successfully");
     } catch (e) {

@@ -1,53 +1,38 @@
-import { useEffect, useState } from "react";
-import type { NotesType } from "../../../features/notes/type";
-import {
-  getNotesByCategory,
-  getNotesByFolderId,
-} from "../../../features/notes/NotesAPI";
+import { useContext, useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
 import NotesCard from "./NotesCard";
 import toast from "react-hot-toast";
+import { NoteContext } from "../../../context/Notes/NoteContext";
 
 const NotesDetails = () => {
-  const [notesList, setNotesList] = useState<NotesType[]>([]);
-  const [IsNoteLoading, setIsNoteLoading] = useState(false);
   const { folderId, folderName, category } = useParams();
+  const [isNoteLoading, setIsNoteLoading] = useState(false);
 
-  const fetchNotesByFolderId = async (folderId: string) => {
+  const context = useContext(NoteContext);
+  if (!context) return toast.error("Some issue with the Note context");
+  const { notesList, reRenderMidById, reRenderMidByCategory } = context;
+
+  const getNotesById = async (folderId: string) => {
+    if (!context) return;
+
     setIsNoteLoading(true);
-    try {
-      const { notes } = await getNotesByFolderId(folderId);
-      setNotesList(notes);
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message);
-      } else {
-        toast.error("Something went wrong");
-      }
-    } finally {
-      setIsNoteLoading(false);
-    }
+    await reRenderMidById(folderId);
+    setIsNoteLoading(false);
   };
 
-  const fetchNotesByCategory = async (category: string) => {
+  const getNotesByCategory = async (category: string) => {
+    if (!context) return;
+
     setIsNoteLoading(true);
-    try {
-      const { notes } = await getNotesByCategory(category);
-      setNotesList(notes);
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message);
-      } else {
-        toast.error("something went wrong");
-      }
-    } finally {
-      setIsNoteLoading(false);
-    }
+    await reRenderMidByCategory(category);
+    setIsNoteLoading(false);
   };
 
+  /* eslint-disable react-hooks/rules-of-hooks */
   useEffect(() => {
-    if (category) fetchNotesByCategory(category);
-    if (folderId) fetchNotesByFolderId(folderId);
+    if (category) getNotesByCategory(category);
+    if (folderId) getNotesById(folderId);
   }, [folderId, category]);
 
   return (
@@ -60,10 +45,10 @@ const NotesDetails = () => {
               key={note.id}
               note={note}
               path={`note/${note.id}`}
-              loading={IsNoteLoading}
+              loading={isNoteLoading}
               reload={() =>
-                (folderId && fetchNotesByFolderId(folderId)) ||
-                (category && fetchNotesByCategory(category))
+                (folderId && reRenderMidById(folderId)) ||
+                (category && reRenderMidByCategory(category))
               }
             />
           ))
