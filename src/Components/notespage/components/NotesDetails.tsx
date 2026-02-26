@@ -37,7 +37,12 @@ const NotesDetails = () => {
 
   return (
     <section className="p-6 min-h-screen bg-background-100">
-      <h1 className="text-xl font-medium">{folderName || category}</h1>
+      <h1 className="text-xl font-medium">
+        {folderName ||
+          (category === "favorite" && "Favorite Notes") ||
+          (category === "deleted" && "Trashed Notes") ||
+          (category === "archived" && "Archived Notes")}
+      </h1>
       <div className="py-8 flex flex-col gap-6">
         {notesList.length > 0 ? (
           notesList.map((note) => (

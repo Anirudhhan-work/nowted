@@ -32,8 +32,8 @@ const NotesCard = ({
   const { folderName, folderId, category } = useParams();
   const navigate = useNavigate();
   const { id, title, createdAt, preview, isFavorite } = note;
-  const [isFav, setIsFav] = useState(isFavorite);
-  const [favLoading, setFavLoading] = useState(false);
+  // const [isFav, setIsFav] = useState(isFavorite);
+  // const [favLoading, setFavLoading] = useState(false);
   if (loading) return <NotesDetailsSkeleton />;
 
   const handleDeleteNoteById = async () => {
@@ -59,19 +59,19 @@ const NotesCard = ({
     }
   };
 
-  const toggleFav = async () => {
-    setFavLoading(true);
-    try {
-      const res = await patchFavNote(id, !isFav);
-      setIsFav((prev) => !prev);
-      toast.success(res);
-    } catch (e) {
-      if (e instanceof Error) toast.error(e.message);
-      else toast.error("Something went wrong");
-    } finally {
-      setFavLoading(false);
-    }
-  };
+  // const toggleFav = async () => {
+  //   setFavLoading(true);
+  //   try {
+  //     const res = await patchFavNote(id, !isFav);
+  //     setIsFav((prev) => !prev);
+  //     toast.success(res);
+  //   } catch (e) {
+  //     if (e instanceof Error) toast.error(e.message);
+  //     else toast.error("Something went wrong");
+  //   } finally {
+  //     setFavLoading(false);
+  //   }
+  // };
 
   const date = new Date(createdAt);
   return (
@@ -87,12 +87,14 @@ const NotesCard = ({
           <Loader2 size={20} className="hover:text-red-500 animate-spin" />
         ) : (
           <div className="flex gap-5 items-center">
-            <Trash2
-              size={20}
-              className="hover:text-red-500 hidden group-hover:block"
-              onClick={handleDeleteNoteById}
-            />
-            {isFav ? (
+            {category !== "deleted" && (
+              <Trash2
+                size={20}
+                className="hover:text-red-500 hidden group-hover:block"
+                onClick={handleDeleteNoteById}
+              />
+            )}
+            {/* {isFav ? (
               <Star
                 size={17}
                 fill="var(--color-color)"
@@ -105,7 +107,7 @@ const NotesCard = ({
                 onClick={toggleFav}
                 className={`${favLoading && "animate-pulse"}`}
               />
-            )}
+            )} */}
           </div>
         )}
       </div>
