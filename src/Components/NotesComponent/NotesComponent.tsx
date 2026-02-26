@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteNoteById,
   getNoteById,
+  // patchFavNote,
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
@@ -13,6 +14,8 @@ import OpenModal from "../OpenModal";
 const NotesComponent = () => {
   const { folderName, folderId, noteId, category } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
+  // const [isFav, setIsFav] = useState(singleNote?.isFavorite);
+  // const [isArchived, setIsArchived] = useState(singleNote?.isArchived);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -86,6 +89,9 @@ const NotesComponent = () => {
 
         {isModalOpen && (
           <OpenModal
+            isFavorite={singleNote!.isFavorite}
+            noteId={noteId!}
+            isArchived={singleNote!.isArchived}
             handleDelete={deleteNote}
             handleRestore={fetchRestoreNote}
             onClose={() => setIsModalOpen(false)}
