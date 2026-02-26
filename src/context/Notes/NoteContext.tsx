@@ -3,6 +3,7 @@ import type { NotesType } from "../../features/notes/type";
 
 type NoteContextType = {
   notesList: NotesType[];
+  totalNotes: number;
   reRenderMidById: (folderId: string) => Promise<void>;
   reRenderMidByCategory: (category: string) => Promise<void>;
 };

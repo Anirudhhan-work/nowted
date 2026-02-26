@@ -11,7 +11,8 @@ const NotesDetails = () => {
 
   const context = useContext(NoteContext);
   if (!context) return toast.error("Some issue with the Note context");
-  const { notesList, reRenderMidById, reRenderMidByCategory } = context;
+  const { notesList, totalNotes, reRenderMidById, reRenderMidByCategory } =
+    context;
 
   const getNotesById = async (folderId: string) => {
     if (!context) return;
@@ -37,11 +38,12 @@ const NotesDetails = () => {
 
   return (
     <section className="p-6 min-h-screen bg-background-100">
-      <h1 className="text-xl font-medium">
+      <h1 className="text-xl font-medium flex items-end justify-between">
         {folderName ||
           (category === "favorite" && "Favorite Notes") ||
           (category === "deleted" && "Trashed Notes") ||
           (category === "archived" && "Archived Notes")}
+        <span className="text-xs text-gray-500">{totalNotes} Notes</span>
       </h1>
       <div className="py-8 flex flex-col gap-6">
         {notesList.length > 0 ? (

@@ -9,11 +9,13 @@ import toast from "react-hot-toast";
 
 export const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
+  const [totalNotes, setTotalNotes] = useState(0);
 
   const reRenderMidById = async (folderId: string) => {
     try {
-      const { notes } = await getNotesByFolderId(folderId);
+      const { notes, total } = await getNotesByFolderId(folderId);
       setNotesList(notes);
+      setTotalNotes(total);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -25,8 +27,9 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
 
   const reRenderMidByCategory = async (category: string) => {
     try {
-      const { notes } = await getNotesByCategory(category);
+      const { notes, total } = await getNotesByCategory(category);
       setNotesList(notes);
+      setTotalNotes(total);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -40,6 +43,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
     <NoteContext.Provider
       value={{
         notesList,
+        totalNotes,
         reRenderMidById,
         reRenderMidByCategory,
       }}

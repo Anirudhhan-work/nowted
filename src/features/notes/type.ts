@@ -20,6 +20,7 @@ export interface RecentNotesResType {
 
 export interface NotesResType {
   notes: NotesType[];
+  total: number;
 }
 
 export interface SingleNoteResType {

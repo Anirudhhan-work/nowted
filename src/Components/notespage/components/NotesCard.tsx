@@ -1,6 +1,6 @@
-import { Loader2, Star, Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { deleteNoteById, patchFavNote } from "../../../features/notes/NotesAPI";
+import { deleteNoteById } from "../../../features/notes/NotesAPI";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import type { NotesType } from "../../../features/notes/type";
@@ -31,7 +31,7 @@ const NotesCard = ({
   const [isNoteDeleting, setIsNoteDeleting] = useState(false);
   const { folderName, folderId, category } = useParams();
   const navigate = useNavigate();
-  const { id, title, createdAt, preview, isFavorite } = note;
+  const { id, title, createdAt, preview } = note;
   // const [isFav, setIsFav] = useState(isFavorite);
   // const [favLoading, setFavLoading] = useState(false);
   if (loading) return <NotesDetailsSkeleton />;
