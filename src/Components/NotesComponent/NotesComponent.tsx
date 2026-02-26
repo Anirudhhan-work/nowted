@@ -1,17 +1,23 @@
 import { CalendarDays, Ellipsis, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
-import { getNoteById } from "../../features/notes/NotesAPI";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  deleteNoteById,
+  getNoteById,
+  restoreNote,
+} from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../OpenModal";
 
 const NotesComponent = () => {
-  const { noteId } = useParams();
+  const { folderName, folderId, noteId, category } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchFolder = async () => {
+    const fetchSingeNote = async () => {
       if (!noteId) return toast.error("Something went wrong");
       try {
         const { note } = await getNoteById(noteId);
@@ -25,10 +31,44 @@ const NotesComponent = () => {
       }
     };
 
-    fetchFolder();
+    fetchSingeNote();
   }, [noteId]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const deleteNote = async () => {
+    if (!noteId) return;
+    try {
+      const res = await deleteNoteById(noteId);
+      if (folderId && folderName) {
+        navigate(`/${folderName}/${folderId}`);
+      }
+
+      toast.success(res);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  };
+
+  const fetchRestoreNote = async () => {
+    if (!noteId) return;
+
+    try {
+      const res = await restoreNote(noteId);
+      toast.success(res);
+      if (category) {
+        navigate(`/${category}`);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  };
 
   return (
     <section className="p-12 w-full overflow-y-auto scrollbar">
@@ -46,7 +86,8 @@ const NotesComponent = () => {
 
         {isModalOpen && (
           <OpenModal
-            handleDelete={() => {}}
+            handleDelete={deleteNote}
+            handleRestore={fetchRestoreNote}
             onClose={() => setIsModalOpen(false)}
           />
         )}

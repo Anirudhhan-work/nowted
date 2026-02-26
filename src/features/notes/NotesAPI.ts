@@ -70,3 +70,8 @@ export const patchNote = async (
   });
   return res.data;
 };
+
+export const restoreNote = async (noteId: string) => {
+  const res = await axiosInstance.post<string>(`notes/${noteId}/restore`);
+  return res.data;
+};
