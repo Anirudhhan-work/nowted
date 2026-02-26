@@ -29,6 +29,12 @@ export const deleteNoteById = async (noteId: string) => {
 };
 
 export const getNotesByCategory = async (category: string) => {
+  if (category === "deleted") {
+    const res = await axiosInstance.get<NotesResType>(
+      "notes?deleted=true&limit=all",
+    );
+    return res.data;
+  }
   const res = await axiosInstance.get<NotesResType>("notes", {
     params: { [category]: true },
   });

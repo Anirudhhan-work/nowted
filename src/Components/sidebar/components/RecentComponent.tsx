@@ -39,10 +39,10 @@ const RecentComponent = () => {
         {recentNotesList.map((notes) => (
           <TabButton
             key={notes.id}
-            path={`${notes.folder.name}/${notes.folderId}/note/${notes.id}`} // more to be added
+            path={`${notes.folder.name}/${notes.folderId}/note/${notes.id}`}
             icon={FileText}
             activeIcon={BookOpenIcon}
-            label={notes.title}
+            label={notes.title || "Untitled Note"}
           />
         ))}
       </div>
