@@ -78,7 +78,7 @@ const NotesCard = ({
     <NavLink
       to={path}
       className={({ isActive }) =>
-        `shadow-lg p-4 rounded-sm group ${isActive ? "dark:shadow-white/10 shadow-black/20 bg-background-700/10" : "bg-background-400  "}`
+        `shadow-lg p-4 rounded-sm group ${isActive ? "bg-primary text-white shadow-black/20" : "bg-background-400  "}`
       }
     >
       <div className="flex justify-between items-center">
@@ -113,6 +113,7 @@ const NotesCard = ({
       </div>
       <div className="py-2 flex gap-2 text-sm">
         <p className="text-background-700/70">{date.toLocaleDateString()}</p>
+        {/* TODO: FIX THIS */}
         <p className="text-background-800 truncate">{preview}</p>
       </div>
     </NavLink>

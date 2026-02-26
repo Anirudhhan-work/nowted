@@ -1,23 +1,22 @@
 import { CalendarDays, Ellipsis, Folder } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteNoteById,
   getNoteById,
-  // patchFavNote,
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../OpenModal";
+import RestoreComponent from "./components/RestoreComponent";
 
 const NotesComponent = () => {
   const { folderName, folderId, noteId, category } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
-  // const [isFav, setIsFav] = useState(singleNote?.isFavorite);
-  // const [isArchived, setIsArchived] = useState(singleNote?.isArchived);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchSingeNote = async () => {
@@ -73,10 +72,22 @@ const NotesComponent = () => {
     }
   };
 
+  if (category) return <RestoreComponent />;
   return (
-    <section className="p-12 w-full overflow-y-auto scrollbar">
+    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-medium">{singleNote?.title}</h1>
+        <input
+          type="text"
+          ref={titleRef}
+          className="text-3xl font-medium outline-none"
+          value={singleNote?.title}
+          onChange={(e) =>
+            setSingleNote((prev) => ({
+              ...prev!,
+              title: e.target.value,
+            }))
+          }
+        />
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -117,7 +128,13 @@ const NotesComponent = () => {
           {singleNote?.folder.name}
         </p>
       </div>
-      <p>{singleNote?.content}</p>
+      <textarea
+        className="w-full outline-none resize-none h-[calc(100vh-30%)]"
+        value={singleNote?.content}
+        onChange={(e) =>
+          setSingleNote((prev) => ({ ...prev!, content: e.target.value }))
+        }
+      />
       <div className="relative"></div>
     </section>
   );
