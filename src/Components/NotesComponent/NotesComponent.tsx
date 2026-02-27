@@ -1,21 +1,24 @@
-import { CalendarDays, Ellipsis, Folder } from "lucide-react";
+import { CalendarDays, Ellipsis, Folder, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteNoteById,
   getNoteById,
+  patchNote,
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
+import { useDebounce } from "../../utils/Debounce";
 
 const NotesComponent = () => {
   const { noteId, category } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showRestore, setShowRestore] = useState(false);
+  const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +31,7 @@ const NotesComponent = () => {
         setSingleNote(note);
       } catch (e) {
         if (e instanceof Error) {
-          console.log(e.message);
+          toast.error(e.message);
         } else {
           toast.error("Something went wrong");
         }
@@ -38,21 +41,35 @@ const NotesComponent = () => {
     fetchSingeNote();
   }, [noteId]);
 
+  // const handleContentChange = useDebounce((value: string) => {
+  //   console.log("Test wokringn ");
+  //   setSingleNote((prev) => ({ ...prev!, content: value }));
+
+  //   toast.success("Updating");
+  // }, 1000);
+
+  const handleContentChange = useDebounce(async (title, content) => {
+    setSaving(true);
+    try {
+      await patchNote(noteId!, title, content);
+      // toast.success("saving...");
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setSaving(false);
+    }
+  }, 500);
+
   const deleteNote = async () => {
     if (!noteId) return;
     try {
       await deleteNoteById(noteId);
 
       setShowRestore(true);
-      // await new Promise((resolve) =>
-      //   setTimeout(() => {
-      //     setShowRestore(false);
-      //   }, 3000),
-      // );
-
-      // if (folderId && folderName) {
-      //   navigate(`/${folderName}/${folderId}`);
-      // }
       toast.success("Note Deleted Successfully");
     } catch (e) {
       if (e instanceof Error) {
@@ -81,7 +98,6 @@ const NotesComponent = () => {
       }
     }
   };
-
   if (singleNote === undefined || !noteId) return;
 
   if (category === "deleted" || showRestore)
@@ -93,19 +109,17 @@ const NotesComponent = () => {
       />
     );
   return (
-    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar">
+    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar h-screen">
       <div className="flex justify-between items-center">
         <input
           type="text"
           ref={titleRef}
           className="text-3xl font-medium outline-none"
           value={singleNote.title}
-          onChange={(e) =>
-            setSingleNote((prev) => ({
-              ...prev!,
-              title: e.target.value,
-            }))
-          }
+          onChange={(e) => {
+            setSingleNote((prev) => ({ ...prev!, title: e.target.value }));
+            handleContentChange(e.target.value, singleNote.title);
+          }}
         />
         <button
           onClick={(e) => {
@@ -149,11 +163,18 @@ const NotesComponent = () => {
       <textarea
         className="w-full outline-none resize-none h-[calc(100vh-30%)]"
         value={singleNote.content}
-        onChange={(e) =>
-          setSingleNote((prev) => ({ ...prev!, content: e.target.value }))
-        }
+        onChange={(e) => {
+          setSingleNote((prev) => ({ ...prev!, content: e.target.value }));
+          handleContentChange(singleNote.title, e.target.value);
+        }}
       />
       <div className="relative"></div>
+      {saving && (
+        <div className="absolute top-215 right-10 flex items-center gap-2 text-background-700">
+          <Loader2 size={15} className="animate-spin" />
+          saving..
+        </div>
+      )}
     </section>
   );
 };

@@ -66,7 +66,7 @@ const NotesCard = ({
           }`}
         >
           <div className="flex justify-between items-center">
-            <h3 className="font-medium text-lg">{title}</h3>
+            <h3 className="font-medium text-lg truncate">{title}</h3>
             {isNoteDeleting ? (
               <Loader2 size={20} className="hover:text-red-500 animate-spin" />
             ) : (

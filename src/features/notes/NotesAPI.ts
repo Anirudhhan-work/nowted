@@ -76,6 +76,18 @@ export const patchArchivedNote = async (
   return res.data;
 };
 
+export const patchNote = async (
+  noteId: string,
+  title: string,
+  content: string,
+) => {
+  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
+    title,
+    content,
+  });
+  return res.data;
+};
+
 export const restoreNote = async (noteId: string) => {
   const res = await axiosInstance.post<string>(`notes/${noteId}/restore`);
   return res.data;

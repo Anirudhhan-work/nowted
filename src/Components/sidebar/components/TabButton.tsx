@@ -108,7 +108,7 @@ const TabButton = ({
             />
           ) : (
             <span className="flex justify-between w-full items-center">
-              <p>{input}</p>
+              <p className="truncate">{input}</p>
               {editable && !isDeleting && (
                 <Trash2
                   size={17}
