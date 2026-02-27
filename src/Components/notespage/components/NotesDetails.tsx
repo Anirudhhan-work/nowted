@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
-import NotesCard from "./NotesCard";
+import NotesCard, { NotesDetailsSkeleton } from "./NotesCard";
 import toast from "react-hot-toast";
 import { NoteContext } from "../../../context/Notes/NoteContext";
 
@@ -46,23 +46,33 @@ const NotesDetails = () => {
         <span className="text-xs text-gray-500">{totalNotes} Notes</span>
       </h1>
       <div className="py-8 flex flex-col gap-6">
-        {notesList.length > 0 ? (
-          notesList.map((note) => (
-            <NotesCard
-              key={note.id}
-              note={note}
-              path={`note/${note.id}`}
-              loading={isNoteLoading}
-              reload={() =>
-                (folderId && reRenderMidById(folderId)) ||
-                (category && reRenderMidByCategory(category))
-              }
-            />
-          ))
+        {isNoteLoading ? (
+          <>
+            <NotesDetailsSkeleton />
+            <NotesDetailsSkeleton />
+            <NotesDetailsSkeleton />
+            <NotesDetailsSkeleton />
+          </>
         ) : (
-          <div className="h-10 flex justify-center items-center ">
-            <p className="text-sm text-background-700">Nothing to show</p>
-          </div>
+          <>
+            {notesList.length > 0 ? (
+              notesList.map((note) => (
+                <NotesCard
+                  key={note.id}
+                  note={note}
+                  path={`note/${note.id}`}
+                  reload={() =>
+                    (folderId && reRenderMidById(folderId)) ||
+                    (category && reRenderMidByCategory(category))
+                  }
+                />
+              ))
+            ) : (
+              <div className="h-10 flex justify-center items-center ">
+                <p className="text-sm text-background-700">Nothing to show</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

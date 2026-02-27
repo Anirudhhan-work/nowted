@@ -19,12 +19,10 @@ const NotesDetailsSkeleton = () => {
 
 const NotesCard = ({
   note,
-  loading,
   path,
   reload,
 }: {
   note: NotesType;
-  loading: boolean;
   path: string;
   reload?: (noteId: string) => void;
 }) => {
@@ -32,9 +30,6 @@ const NotesCard = ({
   const { folderName, folderId, category } = useParams();
   const navigate = useNavigate();
   const { id, title, createdAt, preview } = note;
-  // const [isFav, setIsFav] = useState(isFavorite);
-  // const [favLoading, setFavLoading] = useState(false);
-  if (loading) return <NotesDetailsSkeleton />;
 
   const handleDeleteNoteById = async () => {
     try {
