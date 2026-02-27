@@ -11,7 +11,7 @@ import {
 import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
-import { useDebounce } from "../../utils/Debounce";
+import { useDebounce } from "../../utils/hooks";
 
 const NotesComponent = () => {
   const { noteId, category } = useParams();
@@ -29,6 +29,9 @@ const NotesComponent = () => {
         const { note } = await getNoteById(noteId);
         setShowRestore(false);
         setSingleNote(note);
+        if (!note.title) {
+          titleRef.current?.focus();
+        }
       } catch (e) {
         if (e instanceof Error) {
           toast.error(e.message);
@@ -52,6 +55,8 @@ const NotesComponent = () => {
     setSaving(true);
     try {
       await patchNote(noteId!, title, content);
+      // if (folderId) reRenderMidById(folderId); // TODO: fix
+      // if (category) reRenderMidByCategory(category);
       // toast.success("saving...");
     } catch (e) {
       if (e instanceof Error) {
@@ -62,7 +67,7 @@ const NotesComponent = () => {
     } finally {
       setSaving(false);
     }
-  }, 500);
+  }, 200);
 
   const deleteNote = async () => {
     if (!noteId) return;
@@ -98,6 +103,12 @@ const NotesComponent = () => {
       }
     }
   };
+
+  // const context = useContext(NoteContext);
+
+  // if (!context) return toast.error("Internal Issue");
+  // const { reRenderMidById, reRenderMidByCategory } = context;
+
   if (singleNote === undefined || !noteId) return;
 
   if (category === "deleted" || showRestore)
@@ -114,7 +125,7 @@ const NotesComponent = () => {
         <input
           type="text"
           ref={titleRef}
-          className="text-3xl font-medium outline-none"
+          className="text-3xl font-medium outline-none w-[90%]"
           value={singleNote.title}
           onChange={(e) => {
             setSingleNote((prev) => ({ ...prev!, title: e.target.value }));

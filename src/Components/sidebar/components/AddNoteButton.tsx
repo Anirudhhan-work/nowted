@@ -31,14 +31,14 @@ const AddNoteButton = () => {
   };
 
   return (
-    <section className="flex justify-center py-8 px-5 text-white">
+    <div className="flex justify-center py-8 px-5 text-white">
       <button
         onClick={fetchCreateNote}
         className={`add-btn ${isNoteAdding && "animate-pulse"}`}
       >
         <Plus /> New Note
       </button>
-    </section>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-import AddNoteButton from "./components/AddNoteButton";
 import DarkModeComponent from "./components/DarkModeComponent";
 import FolderComponent from "./components/FolderComponent";
 import HeadComponent from "./components/HeadComponent";
@@ -9,7 +8,6 @@ const SideBar = () => {
   return (
     <nav className="py-8 h-full flex flex-col">
       <HeadComponent />
-      <AddNoteButton />
       <RecentComponent />
       <FolderComponent />
       <MoreComponent />
