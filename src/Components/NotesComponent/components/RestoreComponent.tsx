@@ -1,4 +1,8 @@
 import { Folder, RotateCcw } from "lucide-react";
+import { useContext } from "react";
+import { NoteContext } from "../../../context/Notes/NoteContext";
+import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const RestoreComponent = ({
   title,
@@ -9,6 +13,11 @@ const RestoreComponent = ({
   handleRestore: () => Promise<void>;
   folderName: string;
 }) => {
+  const context = useContext(NoteContext);
+  const { folderId, category } = useParams();
+
+  if (!context) return toast.error("Internal Issue");
+  const { reRenderMidById, reRenderMidByCategory } = context;
   return (
     <section className="p-12 pb-0 w-full flex justify-center items-center flex-col gap-5 min-h-screen">
       <RotateCcw size={90} strokeWidth={0.5} />
@@ -26,7 +35,11 @@ const RestoreComponent = ({
         <p className="text-white text-sm font-medium underline">{folderName}</p>
       </div>
       <button
-        onClick={handleRestore}
+        onClick={async () => {
+          await handleRestore();
+          if (folderId) await reRenderMidById(folderId);
+          if (category) await reRenderMidByCategory(category);
+        }}
         className="bg-primary text-white rounded-md py-2 px-8 cursor-pointer"
       >
         Restore

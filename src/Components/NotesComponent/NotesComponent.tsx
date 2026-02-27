@@ -12,9 +12,10 @@ import OpenModal from "../OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
 
 const NotesComponent = () => {
-  const { folderName, folderId, noteId, category } = useParams();
+  const { noteId, category } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showRestore, setShowRestore] = useState(false);
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +24,7 @@ const NotesComponent = () => {
       if (!noteId) return toast.error("Something went wrong");
       try {
         const { note } = await getNoteById(noteId);
+        setShowRestore(false);
         setSingleNote(note);
       } catch (e) {
         if (e instanceof Error) {
@@ -39,12 +41,19 @@ const NotesComponent = () => {
   const deleteNote = async () => {
     if (!noteId) return;
     try {
-      const res = await deleteNoteById(noteId);
-      if (folderId && folderName) {
-        navigate(`/${folderName}/${folderId}`);
-      }
+      await deleteNoteById(noteId);
 
-      toast.success(res);
+      setShowRestore(true);
+      // await new Promise((resolve) =>
+      //   setTimeout(() => {
+      //     setShowRestore(false);
+      //   }, 3000),
+      // );
+
+      // if (folderId && folderName) {
+      //   navigate(`/${folderName}/${folderId}`);
+      // }
+      toast.success("Note Deleted Successfully");
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -59,7 +68,8 @@ const NotesComponent = () => {
 
     try {
       await restoreNote(noteId);
-      toast.success("File Restored Successfully");
+      setShowRestore(false);
+      toast.success("Note Restored Successfully");
       if (category) {
         navigate(`/${category}`);
       }
@@ -74,7 +84,7 @@ const NotesComponent = () => {
 
   if (singleNote === undefined || !noteId) return;
 
-  if (category === "deleted")
+  if (category === "deleted" || showRestore)
     return (
       <RestoreComponent
         title={singleNote.title || "Untitled Note"}
