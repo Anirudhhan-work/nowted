@@ -58,8 +58,8 @@ const NotesComponent = () => {
     if (!noteId) return;
 
     try {
-      const res = await restoreNote(noteId);
-      toast.success(res);
+      await restoreNote(noteId);
+      toast.success("File Restored Successfully");
       if (category) {
         navigate(`/${category}`);
       }
@@ -72,7 +72,16 @@ const NotesComponent = () => {
     }
   };
 
-  if (category) return <RestoreComponent />;
+  if (singleNote === undefined || !noteId) return;
+
+  if (category === "deleted")
+    return (
+      <RestoreComponent
+        title={singleNote.title || "Untitled Note"}
+        handleRestore={fetchRestoreNote}
+        folderName={singleNote.folder.name || ""}
+      />
+    );
   return (
     <section className="p-12 pb-0 w-full overflow-y-auto scrollbar">
       <div className="flex justify-between items-center">
@@ -80,7 +89,7 @@ const NotesComponent = () => {
           type="text"
           ref={titleRef}
           className="text-3xl font-medium outline-none"
-          value={singleNote?.title}
+          value={singleNote.title}
           onChange={(e) =>
             setSingleNote((prev) => ({
               ...prev!,
@@ -100,11 +109,10 @@ const NotesComponent = () => {
 
         {isModalOpen && (
           <OpenModal
-            isFavorite={singleNote!.isFavorite}
-            noteId={noteId!}
-            isArchived={singleNote!.isArchived}
+            isFavorite={singleNote.isFavorite}
+            noteId={noteId}
+            isArchived={singleNote.isArchived}
             handleDelete={deleteNote}
-            handleRestore={fetchRestoreNote}
             onClose={() => setIsModalOpen(false)}
           />
         )}
@@ -115,7 +123,7 @@ const NotesComponent = () => {
           <h3 className="text-xs font-semibold tracking-wider">Date</h3>
         </div>
         <p className="text-white text-sm font-medium underline ">
-          {singleNote?.createdAt.slice(0, 10)}
+          {singleNote.createdAt.slice(0, 10)}
         </p>
       </div>
       <hr className="border-0.1 border-background-700/40" />
@@ -125,12 +133,12 @@ const NotesComponent = () => {
           <h3 className="text-xs font-semibold tracking-wider">Folder</h3>
         </div>
         <p className="text-white text-sm font-medium underline">
-          {singleNote?.folder.name}
+          {singleNote.folder.name}
         </p>
       </div>
       <textarea
         className="w-full outline-none resize-none h-[calc(100vh-30%)]"
-        value={singleNote?.content}
+        value={singleNote.content}
         onChange={(e) =>
           setSingleNote((prev) => ({ ...prev!, content: e.target.value }))
         }

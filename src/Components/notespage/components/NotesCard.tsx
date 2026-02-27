@@ -59,63 +59,50 @@ const NotesCard = ({
     }
   };
 
-  // const toggleFav = async () => {
-  //   setFavLoading(true);
-  //   try {
-  //     const res = await patchFavNote(id, !isFav);
-  //     setIsFav((prev) => !prev);
-  //     toast.success(res);
-  //   } catch (e) {
-  //     if (e instanceof Error) toast.error(e.message);
-  //     else toast.error("Something went wrong");
-  //   } finally {
-  //     setFavLoading(false);
-  //   }
-  // };
-
   const date = new Date(createdAt);
   return (
-    <NavLink
-      to={path}
-      className={({ isActive }) =>
-        `shadow-lg p-4 rounded-sm group ${isActive ? "bg-primary text-white shadow-black/20" : "bg-background-400  "}`
-      }
-    >
-      <div className="flex justify-between items-center">
-        <h3 className="font-medium text-lg">{title}</h3>
-        {isNoteDeleting ? (
-          <Loader2 size={20} className="hover:text-red-500 animate-spin" />
-        ) : (
-          <div className="flex gap-5 items-center">
-            {category !== "deleted" && (
-              <Trash2
-                size={20}
-                className="hover:text-red-500 hidden group-hover:block"
-                onClick={handleDeleteNoteById}
-              />
-            )}
-            {/* {isFav ? (
-              <Star
-                size={17}
-                fill="var(--color-color)"
-                onClick={toggleFav}
-                className={`${favLoading && "animate-pulse"}`}
-              />
+    <NavLink to={path}>
+      {({ isActive }) => (
+        <div
+          className={`shadow-lg p-4 rounded-sm group ${
+            isActive
+              ? "bg-primary text-white shadow-black/20"
+              : "bg-background-400 hover:bg-background-500/40"
+          }`}
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-medium text-lg">{title}</h3>
+            {isNoteDeleting ? (
+              <Loader2 size={20} className="hover:text-red-500 animate-spin" />
             ) : (
-              <Star
-                size={17}
-                onClick={toggleFav}
-                className={`${favLoading && "animate-pulse"}`}
-              />
-            )} */}
+              <div className="flex gap-5 items-center">
+                {category !== "deleted" && (
+                  <Trash2
+                    size={20}
+                    className="hover:text-red-500 hidden group-hover:block"
+                    onClick={handleDeleteNoteById}
+                  />
+                )}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="py-2 flex gap-2 text-sm">
-        <p className="text-background-700/70">{date.toLocaleDateString()}</p>
-        {/* TODO: FIX THIS */}
-        <p className="text-background-800 truncate">{preview}</p>
-      </div>
+
+          <div className="py-2 flex gap-2 text-sm">
+            <p
+              className={`${isActive ? "text-white/65" : "text-background-700/70"}`}
+            >
+              {date.toLocaleDateString()}
+            </p>
+            <p
+              className={`truncate ${
+                isActive ? "text-white" : "text-background-800"
+              }`}
+            >
+              {preview}
+            </p>
+          </div>
+        </div>
+      )}
     </NavLink>
   );
 };
