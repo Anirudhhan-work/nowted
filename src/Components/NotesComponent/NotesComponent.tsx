@@ -57,7 +57,6 @@ const NotesComponent = () => {
       await patchNote(noteId!, title, content);
       // if (folderId) reRenderMidById(folderId); // TODO: fix
       // if (category) reRenderMidByCategory(category);
-      // toast.success("saving...");
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -67,7 +66,7 @@ const NotesComponent = () => {
     } finally {
       setSaving(false);
     }
-  }, 200);
+  }, 600);
 
   const deleteNote = async () => {
     if (!noteId) return;
@@ -129,7 +128,7 @@ const NotesComponent = () => {
           value={singleNote.title}
           onChange={(e) => {
             setSingleNote((prev) => ({ ...prev!, title: e.target.value }));
-            handleContentChange(e.target.value, singleNote.title);
+            handleContentChange(e.target.value, singleNote.content);
           }}
         />
         <button

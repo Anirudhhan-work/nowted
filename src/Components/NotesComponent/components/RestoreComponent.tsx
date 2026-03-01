@@ -1,4 +1,4 @@
-import { Folder, RotateCcw } from "lucide-react";
+import { Folder, History } from "lucide-react";
 import { useContext } from "react";
 import { NoteContext } from "../../../context/Notes/NoteContext";
 import { useParams } from "react-router-dom";
@@ -20,7 +20,7 @@ const RestoreComponent = ({
   const { reRenderMidById, reRenderMidByCategory } = context;
   return (
     <section className="p-12 pb-0 w-full flex justify-center items-center flex-col gap-5 min-h-screen">
-      <RotateCcw size={90} strokeWidth={0.5} />
+      <History size={90} strokeWidth={0.5} />
       <h1 className="text-3xl font-medium">Restore “{title}”</h1>
       <p className="text-center text-background-700">
         Don't want to lose this note? It's not too late! Just click the
