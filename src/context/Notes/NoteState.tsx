@@ -4,6 +4,7 @@ import type { NotesType } from "../../features/notes/type";
 import {
   getNotesByCategory,
   getNotesByFolderId,
+  getSearchNote,
 } from "../../features/notes/NotesAPI";
 import toast from "react-hot-toast";
 
@@ -39,6 +40,26 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const reRenderBySearch = async (search: string) => {
+    if (!search || search.trim() === "") {
+      setNotesList([]);
+      setTotalNotes(0);
+      return;
+    }
+
+    try {
+      const { notes, total } = await getSearchNote(search);
+      setNotesList(notes);
+      setTotalNotes(total);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("something went wrong");
+      }
+    }
+  };
+
   return (
     <NoteContext.Provider
       value={{
@@ -46,6 +67,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         totalNotes,
         reRenderMidById,
         reRenderMidByCategory,
+        reRenderBySearch,
       }}
     >
       {children}

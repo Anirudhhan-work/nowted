@@ -18,9 +18,6 @@ const FolderComponent = () => {
     try {
       const { folders } = await getFolders();
       setFolderList(folders);
-      if (folders[0].name && folders[0].id && !folderName && !category) {
-        navigation(`/${folders[0].name}/${folders[0].id}`);
-      }
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -36,12 +33,29 @@ const FolderComponent = () => {
     fetchFolders();
   }, []);
 
+  useEffect(() => {
+    if (!folderList.length) return;
+
+    const firstFolder = folderList[0];
+
+    if (
+      !folderName &&
+      !(
+        category === "favorite" ||
+        category === "deleted" ||
+        category === "archived" ||
+        category === "s"
+      )
+    ) {
+      navigation(`/${firstFolder.name}/${firstFolder.id}`);
+    }
+  }, [folderList, folderName, category, navigation]);
+
   const handleCreateFolder = async () => {
     try {
       const res = await createFolder("Untitled0");
       toast.success(res);
       await fetchFolders();
-      fetchFolders();
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);

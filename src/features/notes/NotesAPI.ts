@@ -92,3 +92,10 @@ export const restoreNote = async (noteId: string) => {
   const res = await axiosInstance.post<string>(`notes/${noteId}/restore`);
   return res.data;
 };
+
+export const getSearchNote = async (search: string) => {
+  const res = await axiosInstance.get<NotesResType>(`notes`, {
+    params: { search },
+  });
+  return res.data;
+};

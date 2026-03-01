@@ -3,7 +3,7 @@ import logo from "../../../assets/nowtedlogo.svg";
 import { ThemeContext } from "../../../context/theme/ThemeContext";
 import { useContext, useState } from "react";
 import AddNoteButton from "./AddNoteButton";
-import SearchButton from "./SearchButton";
+import SearchBar from "./SearchBar";
 const HeadComponent = () => {
   const context = useContext(ThemeContext);
   if (!context) throw console.error("Some issue with the Theme context");
@@ -22,7 +22,7 @@ const HeadComponent = () => {
           onClick={() => setShowSearchBar((prev) => !prev)}
         />
       </div>
-      {showSearchBar ? <SearchButton /> : <AddNoteButton />}
+      {showSearchBar ? <SearchBar /> : <AddNoteButton />}
     </section>
   );
 };

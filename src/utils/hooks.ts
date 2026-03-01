@@ -1,16 +1,16 @@
 import { useRef } from "react";
 
-export const useDebounce = (
-  callback: (title: string, content: string) => void,
+export const useDebounce = <T>(
+  callback: (...args: T[]) => void,
   time: number,
 ) => {
   const timerRef = useRef<number>(null);
 
-  return function (title: string, content: string) {
+  return function (...args: T[]) {
     if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
-      callback(title, content);
+      callback(...args);
     }, time);
   };
 };

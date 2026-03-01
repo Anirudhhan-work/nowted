@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import NotesCard, { NotesDetailsSkeleton } from "./NotesCard";
 import toast from "react-hot-toast";
 import { NoteContext } from "../../../context/Notes/NoteContext";
@@ -8,11 +8,18 @@ import { NoteContext } from "../../../context/Notes/NoteContext";
 const NotesDetails = () => {
   const { folderId, folderName, category } = useParams();
   const [isNoteLoading, setIsNoteLoading] = useState(false);
+  const [searhParams] = useSearchParams();
+  const search = searhParams.get("search") || "";
 
   const context = useContext(NoteContext);
   if (!context) return toast.error("Some issue with the Note context");
-  const { notesList, totalNotes, reRenderMidById, reRenderMidByCategory } =
-    context;
+  const {
+    notesList,
+    totalNotes,
+    reRenderMidById,
+    reRenderMidByCategory,
+    reRenderBySearch,
+  } = context;
 
   const getNotesById = async (folderId: string) => {
     if (!context) return;
@@ -32,9 +39,10 @@ const NotesDetails = () => {
 
   /* eslint-disable react-hooks/rules-of-hooks */
   useEffect(() => {
-    if (category) getNotesByCategory(category);
-    if (folderId) getNotesById(folderId);
-  }, [folderId, category]);
+    if (search) reRenderBySearch(search);
+    else if (category) getNotesByCategory(category);
+    else if (folderId) getNotesById(folderId);
+  }, [folderId, category, search]);
 
   return (
     <section className="p-6 min-h-screen bg-background-100">
@@ -42,7 +50,8 @@ const NotesDetails = () => {
         {folderName ||
           (category === "favorite" && "Favorite Notes") ||
           (category === "deleted" && "Trashed Notes") ||
-          (category === "archived" && "Archived Notes")}
+          (category === "archived" && "Archived Notes") ||
+          (category === "s" && "Searched Notes")}
         <span className="text-xs text-gray-500">{totalNotes} Notes</span>
       </h1>
       <div className="py-8 flex flex-col gap-6">
