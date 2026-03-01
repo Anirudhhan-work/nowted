@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks";
 
@@ -8,20 +8,16 @@ const SearchBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleSearch = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
-    const search = e.target.value;
-
+  const handleSearch = useDebounce((searchValue: string) => {
     const params = new URLSearchParams(location.search);
 
-    if (search) {
-      params.set("search", search);
+    if (searchValue.trim()) {
+      params.set("search", searchValue);
+      navigate(`/s?${params}`);
     } else {
       params.delete("search");
       navigate("/");
-      return;
     }
-
-    navigate(`/s?${params}`);
   }, 500);
 
   return (
@@ -31,7 +27,7 @@ const SearchBar = () => {
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
-          handleSearch(e);
+          handleSearch(e.target.value);
         }}
         className="outline-none w-[90%] px-12 py-3 bg-background-100 rounded-sm "
         placeholder="Search note"

@@ -29,15 +29,21 @@ const OpenModal = ({
     modalRef.current?.focus();
   }, []);
 
+  const context = useContext(NoteContext);
+
+  if (!context) {
+    toast.error("Internal Issue");
+    return null;
+  }
+  const { reRenderMidById, reRenderMidByCategory } = context;
+
   const fetchPatchFavNote = async () => {
     try {
       const res = await patchFavNote(noteId, !isFav);
       setIsFav((prev) => !prev);
       if (category) await reRenderMidByCategory(category);
-      if (folderId) {
-        console.log("sss");
-        await reRenderMidById(folderId);
-      }
+      else if (folderId) await reRenderMidById(folderId);
+
       toast.success(res);
     } catch (e) {
       if (e instanceof Error) {
@@ -57,8 +63,8 @@ const OpenModal = ({
         navigate(`/${category}`);
       }
       if (folderId && folderName) {
-        navigate(`/${folderName}/${folderId}`);
         await reRenderMidById(folderId);
+        navigate(`/${folderName}/${folderId}`);
       }
       toast.success(res);
     } catch (e) {
@@ -69,11 +75,6 @@ const OpenModal = ({
       }
     }
   };
-
-  const context = useContext(NoteContext);
-
-  if (!context) return toast.error("Internal Issue");
-  const { reRenderMidById, reRenderMidByCategory } = context;
 
   return (
     <div
@@ -122,12 +123,17 @@ const OpenModal = ({
       <hr className="border-01 border-background-700/10 mt-4 mb-4" />
 
       <button
+        disabled={isDeleting}
         onClick={async () => {
           setIsDeleting(true);
-          await handleDelete();
-          if (category) await reRenderMidByCategory(category);
-          if (folderId) await reRenderMidById(folderId);
-          setIsDeleting(false);
+          try {
+            await handleDelete();
+
+            if (category) await reRenderMidByCategory(category);
+            else if (folderId) await reRenderMidById(folderId);
+          } finally {
+            setIsDeleting(false);
+          }
         }}
         className="modal-item hover:text-red-600"
       >

@@ -4,12 +4,15 @@ import { ThemeContext } from "../../../context/theme/ThemeContext";
 import { useContext, useState } from "react";
 import AddNoteButton from "./AddNoteButton";
 import SearchBar from "./SearchBar";
+import toast from "react-hot-toast";
 const HeadComponent = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw console.error("Some issue with the Theme context");
-  const { darkMode } = context;
-
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const context = useContext(ThemeContext);
+  if (!context) {
+    toast.error("Some issue with the Theme context");
+    return null;
+  }
+  const { darkMode } = context;
 
   return (
     <section>

@@ -1,6 +1,6 @@
 import { Folder, FolderOpen, FolderPlus } from "lucide-react";
 import TabButton from "./TabButton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFolder, getFolders } from "../../../features/folders/folderAPI";
 import type { FolderType } from "../../../features/folders/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
@@ -10,10 +10,11 @@ import toast from "react-hot-toast";
 const FolderComponent = () => {
   const [folderList, setFolderList] = useState<FolderType[]>([]);
   const [isFolderLoading, setIsFolderLoading] = useState(false);
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const navigation = useNavigate();
   const { folderName, category } = useParams();
 
-  const fetchFolders = async () => {
+  const fetchFolders = useCallback(async () => {
     setIsFolderLoading(true);
     try {
       const { folders } = await getFolders();
@@ -27,11 +28,11 @@ const FolderComponent = () => {
     } finally {
       setIsFolderLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchFolders();
-  }, []);
+  }, [fetchFolders]);
 
   useEffect(() => {
     if (!folderList.length) return;
@@ -52,8 +53,11 @@ const FolderComponent = () => {
   }, [folderList, folderName, category, navigation]);
 
   const handleCreateFolder = async () => {
+    if (isCreatingFolder) return;
+    setIsCreatingFolder(true);
+
     try {
-      const res = await createFolder("Untitled0");
+      const res = await createFolder("Untitled");
       toast.success(res);
       await fetchFolders();
     } catch (e) {
@@ -62,6 +66,8 @@ const FolderComponent = () => {
       } else {
         toast.error("Something went wrong");
       }
+    } finally {
+      setIsCreatingFolder(false);
     }
   };
 
@@ -79,13 +85,14 @@ const FolderComponent = () => {
       <div className="flex flex-col gap-0.5 lg:h-52 overflow-y-auto scrollbar py-1">
         {folderList.map((folder) => (
           <TabButton
-            path={`${folder.name}/${folder.id}`}
+            path={`/${encodeURIComponent(folder.name)}/${folder.id}`}
             key={folder.id}
             icon={Folder}
             label={folder.name}
             activeIcon={FolderOpen}
             editable={true}
             reloadData={fetchFolders}
+            folderId={folder.id}
           />
         ))}
         {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}

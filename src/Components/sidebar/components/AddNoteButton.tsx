@@ -10,7 +10,10 @@ const AddNoteButton = () => {
   const [isNoteAdding, setIsNoteAdding] = useState(false);
   const navigate = useNavigate();
   const context = useContext(NoteContext);
-  if (!context) return toast.error("Some issue with the Note context");
+  if (!context) {
+    toast.error("Some issue with the Note context");
+    return null;
+  }
   const { reRenderMidById } = context;
 
   const fetchCreateNote = async () => {

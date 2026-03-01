@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { NoteContext } from "./NoteContext";
 import type { NotesType } from "../../features/notes/type";
 import {
@@ -12,7 +12,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
   const [totalNotes, setTotalNotes] = useState(0);
 
-  const reRenderMidById = async (folderId: string) => {
+  const reRenderMidById = useCallback(async (folderId: string) => {
     try {
       const { notes, total } = await getNotesByFolderId(folderId);
       setNotesList(notes);
@@ -24,9 +24,9 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         toast.error("Something went wrong");
       }
     }
-  };
+  }, []);
 
-  const reRenderMidByCategory = async (category: string) => {
+  const reRenderMidByCategory = useCallback(async (category: string) => {
     try {
       const { notes, total } = await getNotesByCategory(category);
       setNotesList(notes);
@@ -38,9 +38,9 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         toast.error("something went wrong");
       }
     }
-  };
+  }, []);
 
-  const reRenderBySearch = async (search: string) => {
+  const reRenderBySearch = useCallback(async (search: string) => {
     if (!search || search.trim() === "") {
       setNotesList([]);
       setTotalNotes(0);
@@ -48,7 +48,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const { notes, total } = await getSearchNote(search);
+      const { notes, total } = await getSearchNote(search.trim());
       setNotesList(notes);
       setTotalNotes(total);
     } catch (e) {
@@ -58,7 +58,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         toast.error("something went wrong");
       }
     }
-  };
+  }, []);
 
   return (
     <NoteContext.Provider

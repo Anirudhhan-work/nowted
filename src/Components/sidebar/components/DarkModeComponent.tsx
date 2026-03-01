@@ -5,14 +5,17 @@ import toast from "react-hot-toast";
 
 const DarkModeComponent = () => {
   const context = useContext(ThemeContext);
-  if (!context) return toast.error("Some issue with the Theme context");
+  if (!context) {
+    toast.error("Some issue with the Theme context");
+    return null;
+  }
   const { darkMode, toggleDarkMode } = context;
   return (
     <section className="flex gap-5 justify-center font-medium mt-auto text-sm">
       <p
         className="text-zinc-600 dark:text-white cursor-pointer"
         onClick={() => {
-          if (darkMode === true) toggleDarkMode();
+          if (darkMode) toggleDarkMode();
         }}
       >
         Light
@@ -29,7 +32,7 @@ const DarkModeComponent = () => {
       <p
         className="dark:text-zinc-500 text-black cursor-pointer"
         onClick={() => {
-          if (darkMode === false) toggleDarkMode();
+          if (!darkMode) toggleDarkMode();
         }}
       >
         Dark

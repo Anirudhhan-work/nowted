@@ -1,6 +1,6 @@
 import { Loader2, Trash2, type LucideIcon } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   deleteFolder,
   renameFolder,
@@ -14,6 +14,7 @@ interface TabButtonProps {
   activeIcon?: LucideIcon;
   editable?: boolean;
   reloadData?: () => void;
+  folderId?: string;
 }
 
 const TabButton = ({
@@ -23,12 +24,12 @@ const TabButton = ({
   activeIcon: ActiveIcon,
   editable = false,
   reloadData,
+  folderId,
 }: TabButtonProps) => {
   const [input, setInput] = useState(label);
   const [edit, setEdit] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { folderId } = useParams();
   const navigate = useNavigate();
 
   const handleBlur = async () => {
@@ -43,9 +44,9 @@ const TabButton = ({
       return;
     }
     try {
-      const res = await renameFolder(folderId, input);
+      const res = await renameFolder(folderId, input.trim());
       toast.success(res);
-      navigate(`/${input}/${folderId}`);
+      navigate(`/${encodeURIComponent(input.trim())}/${folderId}`);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
