@@ -1,5 +1,5 @@
 import { Folder, History } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NoteContext } from "../../../context/Notes/NoteContext";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -15,8 +15,12 @@ const RestoreComponent = ({
 }) => {
   const context = useContext(NoteContext);
   const { folderId, category } = useParams();
+  const [isRestoring, setIsRestoring] = useState(false);
 
-  if (!context) return toast.error("Internal Issue");
+  if (!context) {
+    toast.error("Internal Issue");
+    return null;
+  }
   const { reRenderMidById, reRenderMidByCategory } = context;
   return (
     <section className="p-12 pb-0 w-full flex justify-center items-center flex-col gap-5 min-h-screen">
@@ -35,12 +39,15 @@ const RestoreComponent = ({
         <p className="text-white text-sm font-medium underline">{folderName}</p>
       </div>
       <button
+        disabled={isRestoring}
         onClick={async () => {
+          setIsRestoring(true);
           await handleRestore();
           if (folderId) await reRenderMidById(folderId);
-          if (category) await reRenderMidByCategory(category);
+          else if (category) await reRenderMidByCategory(category);
+          setIsRestoring(false);
         }}
-        className="bg-primary text-white rounded-md py-2 px-8 cursor-pointer"
+        className={`bg-primary text-white rounded-md py-2 px-8 cursor-pointer ${isRestoring && "animate-pulse"}`}
       >
         Restore
       </button>

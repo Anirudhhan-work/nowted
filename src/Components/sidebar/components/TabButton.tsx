@@ -32,10 +32,16 @@ const TabButton = ({
   const navigate = useNavigate();
 
   const handleBlur = async () => {
-    if (!folderId) return;
+    if (!folderId) {
+      setEdit(false);
+      return;
+    }
 
-    if (input.trim() === label) return;
-    if (input.trim().length === 0) return;
+    if (input.trim() === label || input.trim().length === 0) {
+      setInput(label);
+      setEdit(false);
+      return;
+    }
     try {
       const res = await renameFolder(folderId, input);
       toast.success(res);
@@ -113,7 +119,11 @@ const TabButton = ({
                 <Trash2
                   size={17}
                   className="group-hover:block hover:text-red-500 hidden"
-                  onClick={handleDeleteFolder}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDeleteFolder();
+                  }}
                 />
               )}
               {isDeleting && (

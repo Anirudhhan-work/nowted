@@ -1,5 +1,5 @@
 import { CalendarDays, Ellipsis, Folder, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -12,9 +12,10 @@ import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
 import { useDebounce } from "../../utils/hooks";
+import { NoteContext } from "../../context/Notes/NoteContext";
 
 const NotesComponent = () => {
-  const { noteId, category } = useParams();
+  const { noteId, category, folderId } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showRestore, setShowRestore] = useState(false);
@@ -51,22 +52,27 @@ const NotesComponent = () => {
   //   toast.success("Updating");
   // }, 1000);
 
-  const handleContentChange = useDebounce(async (title, content) => {
-    setSaving(true);
-    try {
-      await patchNote(noteId!, title, content);
-      // if (folderId) reRenderMidById(folderId); // TODO: fix
-      // if (category) reRenderMidByCategory(category);
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message);
-      } else {
-        toast.error("Something went wrong");
+  const handleContentChange = useDebounce(
+    async (title: string, content: string) => {
+      if (!noteId) return;
+
+      setSaving(true);
+      try {
+        await patchNote(noteId, title, content);
+        if (folderId) reRenderMidById(folderId);
+        else if (category) reRenderMidByCategory(category);
+      } catch (e) {
+        if (e instanceof Error) {
+          toast.error(e.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      } finally {
+        setSaving(false);
       }
-    } finally {
-      setSaving(false);
-    }
-  }, 600);
+    },
+    600,
+  );
 
   const deleteNote = async () => {
     if (!noteId) return;
@@ -103,12 +109,15 @@ const NotesComponent = () => {
     }
   };
 
-  // const context = useContext(NoteContext);
+  const context = useContext(NoteContext);
 
-  // if (!context) return toast.error("Internal Issue");
-  // const { reRenderMidById, reRenderMidByCategory } = context;
+  if (!context) {
+    toast.error("Internal Issue");
+    return null;
+  }
+  const { reRenderMidById, reRenderMidByCategory } = context;
 
-  if (singleNote === undefined || !noteId) return;
+  if (singleNote === undefined || !noteId) return null;
 
   if (category === "deleted" || showRestore)
     return (

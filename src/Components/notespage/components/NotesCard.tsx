@@ -34,15 +34,15 @@ const NotesCard = ({
   const handleDeleteNoteById = async () => {
     try {
       setIsNoteDeleting(true);
-      const res = await deleteNoteById(id);
-      if (folderName || folderId) {
+      await deleteNoteById(id);
+      if (folderName && folderId) {
         navigate(`/${folderName}/${folderId}`);
       }
       if (category) {
         navigate(`/${category}`);
       }
       reload?.(id);
-      toast.success(res);
+      toast.success("Note Deleted");
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
