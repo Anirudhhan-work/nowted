@@ -97,6 +97,7 @@ const NotesComponent = () => {
       await restoreNote(noteId);
       setShowRestore(false);
       toast.success("Note Restored Successfully");
+      setSingleNote((prev) => ({ ...prev!, deletedAt: "" }));
       if (category) {
         navigate(`/${category}`);
       }
@@ -138,7 +139,7 @@ const NotesComponent = () => {
 
   if (singleNote === undefined || !noteId) return null;
 
-  if (category === "deleted" || showRestore)
+  if (category === "deleted" || showRestore || singleNote.deletedAt)
     return (
       <RestoreComponent
         title={singleNote.title || "Untitled Note"}
@@ -147,7 +148,7 @@ const NotesComponent = () => {
       />
     );
   return (
-    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar h-screen">
+    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar min-h-screen">
       <div className="flex justify-between items-center">
         <input
           type="text"
