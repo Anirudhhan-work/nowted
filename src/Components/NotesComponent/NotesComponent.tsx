@@ -185,7 +185,7 @@ const NotesComponent = () => {
           <CalendarDays size={20} />
           <h3 className="text-xs font-semibold tracking-wider">Date</h3>
         </div>
-        <p className="text-white text-sm font-medium underline ">
+        <p className="text-sm font-medium underline text-color">
           {singleNote.createdAt.slice(0, 10)}
         </p>
       </div>
@@ -197,7 +197,7 @@ const NotesComponent = () => {
         </div>
         <select
           disabled={category === "archived"}
-          className="h-10 text-white text-sm font-medium underline outline-none cursor-pointer bg-background"
+          className="h-10 text-sm font-medium underline outline-none cursor-pointer bg-background text-color"
           value={singleNote.folder.id}
           onChange={(e) => handleFolderChange(e.target.value)}
         >
