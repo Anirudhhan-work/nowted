@@ -88,6 +88,13 @@ export const patchNote = async (
   return res.data;
 };
 
+export const patchNoteFolder = async (noteId: string, folderId: string) => {
+  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
+    folderId,
+  });
+  return res.data;
+};
+
 export const restoreNote = async (noteId: string) => {
   const res = await axiosInstance.post<string>(`notes/${noteId}/restore`);
   return res.data;

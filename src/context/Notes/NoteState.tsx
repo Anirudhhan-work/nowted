@@ -7,10 +7,16 @@ import {
   getSearchNote,
 } from "../../features/notes/NotesAPI";
 import toast from "react-hot-toast";
+import type { FolderType } from "../../features/folders/type";
 
 export const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
   const [totalNotes, setTotalNotes] = useState(0);
+  const [folderList, setFolderList] = useState<FolderType[]>([]);
+
+  const setFolderListState = (folders: FolderType[]) => {
+    setFolderList(folders);
+  };
 
   const reRenderMidById = useCallback(async (folderId: string) => {
     try {
@@ -63,6 +69,8 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   return (
     <NoteContext.Provider
       value={{
+        folderList,
+        setFolderListState,
         notesList,
         totalNotes,
         reRenderMidById,

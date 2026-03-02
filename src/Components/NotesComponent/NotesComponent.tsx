@@ -6,6 +6,7 @@ import {
   deleteNoteById,
   getNoteById,
   patchNote,
+  patchNoteFolder,
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
@@ -78,7 +79,6 @@ const NotesComponent = () => {
     if (!noteId) return;
     try {
       await deleteNoteById(noteId);
-
       setShowRestore(true);
       toast.success("Note Deleted Successfully");
     } catch (e) {
@@ -109,13 +109,28 @@ const NotesComponent = () => {
     }
   };
 
+  const handleFolderChange = async (newFolderId: string) => {
+    if (!noteId) return;
+    try {
+      await patchNoteFolder(noteId, newFolderId);
+      toast.success("Folder Changed Successfully");
+      if (folderId) await reRenderMidById(folderId);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  };
+
   const context = useContext(NoteContext);
 
   if (!context) {
     toast.error("Internal Issue");
     return null;
   }
-  const { reRenderMidById, reRenderMidByCategory } = context;
+  const { reRenderMidById, reRenderMidByCategory, folderList } = context;
 
   if (singleNote === undefined || !noteId) return null;
 
@@ -175,9 +190,20 @@ const NotesComponent = () => {
           <Folder size={20} />
           <h3 className="text-xs font-semibold tracking-wider">Folder</h3>
         </div>
-        <p className="text-white text-sm font-medium underline">
-          {singleNote.folder.name}
-        </p>
+        <select
+          disabled={category === "archived"}
+          className="h-10 text-white text-sm font-medium underline outline-none cursor-pointer bg-background"
+          onChange={(e) => handleFolderChange(e.target.value)}
+        >
+          <option value={singleNote.folder.id} className="bg-background">
+            {singleNote.folder.name}
+          </option>
+          {folderList.map((folder) => (
+            <option key={folder.id} value={folder.id} className="bg-background">
+              {folder.name}
+            </option>
+          ))}
+        </select>
       </div>
       <textarea
         className="w-full outline-none resize-none h-[calc(100vh-30%)]"

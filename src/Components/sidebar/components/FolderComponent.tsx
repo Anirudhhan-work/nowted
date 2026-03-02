@@ -1,14 +1,13 @@
 import { Folder, FolderOpen, FolderPlus } from "lucide-react";
 import TabButton from "./TabButton";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { createFolder, getFolders } from "../../../features/folders/folderAPI";
-import type { FolderType } from "../../../features/folders/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { NoteContext } from "../../../context/Notes/NoteContext";
 
 const FolderComponent = () => {
-  const [folderList, setFolderList] = useState<FolderType[]>([]);
   const [isFolderLoading, setIsFolderLoading] = useState(false);
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const navigation = useNavigate();
@@ -18,7 +17,7 @@ const FolderComponent = () => {
     setIsFolderLoading(true);
     try {
       const { folders } = await getFolders();
-      setFolderList(folders);
+      setFolderListState(folders);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -50,7 +49,7 @@ const FolderComponent = () => {
     ) {
       navigation(`/${firstFolder.name}/${firstFolder.id}`);
     }
-  }, [folderList, folderName, category, navigation]);
+  }, [folderName, category, navigation]);
 
   const handleCreateFolder = async () => {
     if (isCreatingFolder) return;
@@ -70,6 +69,14 @@ const FolderComponent = () => {
       setIsCreatingFolder(false);
     }
   };
+
+  const context = useContext(NoteContext);
+  if (!context) {
+    toast.error("Internal Issue");
+    return null;
+  }
+
+  const { folderList, setFolderListState } = context;
 
   return (
     <section className="py-6">
