@@ -201,7 +201,7 @@ const NotesComponent = () => {
           value={singleNote.folder.id}
           onChange={(e) => handleFolderChange(e.target.value)}
         >
-          {folderList.map((folder) => (
+          {folderList?.map((folder) => (
             <option key={folder.id} value={folder.id} className="bg-background">
               {folder.name.slice(0, 20)}
             </option>

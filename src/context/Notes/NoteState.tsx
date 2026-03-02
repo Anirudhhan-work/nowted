@@ -54,9 +54,9 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const { notes, total } = await getSearchNote(search.trim());
+      const { notes } = await getSearchNote(search.trim());
       setNotesList(notes);
-      setTotalNotes(total);
+      setTotalNotes(notes.length);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
