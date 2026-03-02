@@ -43,6 +43,13 @@ const TabButton = ({
       setEdit(false);
       return;
     }
+
+    if (input.trim().length > 20) {
+      setInput(label);
+      toast.error("No more than 20 character");
+      setEdit(false);
+      return;
+    }
     try {
       const res = await renameFolder(folderId, input.trim());
       toast.success(res);

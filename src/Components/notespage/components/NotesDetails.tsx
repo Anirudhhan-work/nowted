@@ -45,7 +45,7 @@ const NotesDetails = () => {
   }, [folderId, category, search]);
 
   return (
-    <section className="p-6 min-h-screen bg-background-100">
+    <section className="p-6 min-h-screen w-full bg-background-100">
       <h1 className="text-xl font-medium flex items-end justify-between">
         {folderName ||
           (category === "favorite" && "Favorite Notes") ||

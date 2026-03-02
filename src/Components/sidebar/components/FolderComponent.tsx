@@ -13,6 +13,16 @@ const FolderComponent = () => {
   const navigation = useNavigate();
   const { folderName, category } = useParams();
 
+  const context = useContext(NoteContext);
+
+  if (!context) {
+    toast.error("Internal Issue");
+    return null;
+  }
+
+  const { folderList, setFolderListState } = context;
+
+  /* eslint-disable react-hooks/rules-of-hooks */
   const fetchFolders = useCallback(async () => {
     setIsFolderLoading(true);
     try {
@@ -49,7 +59,7 @@ const FolderComponent = () => {
     ) {
       navigation(`/${firstFolder.name}/${firstFolder.id}`);
     }
-  }, [folderName, category, navigation]);
+  }, [folderList, folderName, category, navigation]);
 
   const handleCreateFolder = async () => {
     if (isCreatingFolder) return;
@@ -69,14 +79,6 @@ const FolderComponent = () => {
       setIsCreatingFolder(false);
     }
   };
-
-  const context = useContext(NoteContext);
-  if (!context) {
-    toast.error("Internal Issue");
-    return null;
-  }
-
-  const { folderList, setFolderListState } = context;
 
   return (
     <section className="py-6">

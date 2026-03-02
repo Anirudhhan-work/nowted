@@ -3,7 +3,7 @@ import TabButton from "./TabButton";
 
 const MoreComponent = () => {
   return (
-    <section>
+    <section className="mt-auto mb-5">
       <h3 className="text-sm text font-medium px-5 text-background-800">
         More
       </h3>

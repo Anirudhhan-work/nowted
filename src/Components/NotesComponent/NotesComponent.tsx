@@ -115,6 +115,10 @@ const NotesComponent = () => {
       await patchNoteFolder(noteId, newFolderId);
       toast.success("Folder Changed Successfully");
       if (folderId) await reRenderMidById(folderId);
+      setSingleNote((prev) => ({
+        ...prev!,
+        folder: { ...prev!.folder, id: newFolderId },
+      }));
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -193,14 +197,12 @@ const NotesComponent = () => {
         <select
           disabled={category === "archived"}
           className="h-10 text-white text-sm font-medium underline outline-none cursor-pointer bg-background"
+          value={singleNote.folder.id}
           onChange={(e) => handleFolderChange(e.target.value)}
         >
-          <option value={singleNote.folder.id} className="bg-background">
-            {singleNote.folder.name}
-          </option>
           {folderList.map((folder) => (
             <option key={folder.id} value={folder.id} className="bg-background">
-              {folder.name}
+              {folder.name.slice(0, 20)}
             </option>
           ))}
         </select>

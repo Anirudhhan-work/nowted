@@ -43,7 +43,7 @@ const OpenModal = ({
       setIsFav((prev) => !prev);
       if (category) await reRenderMidByCategory(category);
       else if (folderId) await reRenderMidById(folderId);
-
+      if (category) navigate(`/${category}`);
       toast.success(res);
     } catch (e) {
       if (e instanceof Error) {
@@ -88,7 +88,7 @@ const OpenModal = ({
       className="absolute right-13 top-22 mt-2 w-60 bg-zinc-200 dark:bg-background-100 rounded-md shadow-lg p-2 z-50"
     >
       <button
-        className="modal-item hover:text-color text-background-800"
+        className="modal-item hover:text-color hover:bg-background/80 text-background-800"
         onClick={fetchPatchFavNote}
       >
         {isFav ? (
@@ -104,7 +104,7 @@ const OpenModal = ({
         )}
       </button>
       <button
-        className="modal-item hover:text-color text-background-800"
+        className="modal-item hover:text-color hover:bg-background/80 text-background-800"
         onClick={fetchPatchArchivedNote}
       >
         {isArchive ? (

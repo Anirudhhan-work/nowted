@@ -11,7 +11,7 @@ const DarkModeComponent = () => {
   }
   const { darkMode, toggleDarkMode } = context;
   return (
-    <section className="flex gap-5 justify-center font-medium mt-auto text-sm">
+    <section className="flex gap-5 justify-center font-medium text-sm">
       <p
         className="text-zinc-600 dark:text-white cursor-pointer"
         onClick={() => {

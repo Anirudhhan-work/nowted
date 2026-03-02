@@ -1,23 +1,17 @@
 import { Search } from "lucide-react";
 import logo from "../../../assets/nowtedlogo.svg";
-import { ThemeContext } from "../../../context/theme/ThemeContext";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import AddNoteButton from "./AddNoteButton";
 import SearchBar from "./SearchBar";
-import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 const HeadComponent = () => {
-  const [showSearchBar, setShowSearchBar] = useState(false);
-  const context = useContext(ThemeContext);
-  if (!context) {
-    toast.error("Some issue with the Theme context");
-    return null;
-  }
-  const { darkMode } = context;
+  const { category } = useParams();
+  const [showSearchBar, setShowSearchBar] = useState(category === "s");
 
   return (
     <section>
       <div
-        className={`flex justify-between items-center px-5 ${!darkMode && "invert-75"}`}
+        className={`flex justify-between items-center dark:invert-0 invert-75 px-5`}
       >
         <img src={logo} alt="nowted logo" />
         <Search

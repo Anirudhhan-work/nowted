@@ -1,10 +1,13 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks";
 
 const SearchBar = () => {
-  const [searchInput, setSearchInput] = useState("");
+  const [searhParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState(
+    searhParams.get("search") || "",
+  );
   const location = useLocation();
   const navigate = useNavigate();
 

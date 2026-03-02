@@ -5,7 +5,7 @@ import NotesTemplate from "./components/NotesTemplate";
 const NotesPage = () => {
   const { noteId } = useParams();
   return (
-    <section className="flex h-screen overflow-hidden">
+    <section className="flex h-screen ">
       <div className="lg:w-[30.7%] w-[40%] h-screen overflow-y-auto scrollbar">
         <NotesDetails />
       </div>
