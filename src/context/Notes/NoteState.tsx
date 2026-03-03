@@ -19,6 +19,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const reRenderMidById = useCallback(async (folderId: string) => {
+    console.log("Id chal pada");
     try {
       const { notes, total } = await getNotesByFolderId(folderId);
       setNotesList(notes);
@@ -33,6 +34,8 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const reRenderMidByCategory = useCallback(async (category: string) => {
+    console.log("Category chal pada");
+
     try {
       const { notes, total } = await getNotesByCategory(category);
       setNotesList(notes);
@@ -56,7 +59,7 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
     try {
       const { notes } = await getSearchNote(search.trim());
       setNotesList(notes);
-      setTotalNotes(notes.length);
+      setTotalNotes(notes?.length);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);

@@ -1,8 +1,5 @@
 import { Folder, History } from "lucide-react";
-import { useContext, useState } from "react";
-import { NoteContext } from "../../../context/Notes/NoteContext";
-import { useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { useState } from "react";
 
 const RestoreComponent = ({
   title,
@@ -13,15 +10,8 @@ const RestoreComponent = ({
   handleRestore: () => Promise<void>;
   folderName: string;
 }) => {
-  const context = useContext(NoteContext);
-  const { folderId, category } = useParams();
   const [isRestoring, setIsRestoring] = useState(false);
 
-  if (!context) {
-    toast.error("Internal Issue");
-    return null;
-  }
-  const { reRenderMidById, reRenderMidByCategory } = context;
   return (
     <section className="p-12 pb-0 w-full flex justify-center items-center flex-col gap-5 min-h-screen">
       <History size={90} strokeWidth={0.5} />
@@ -43,8 +33,6 @@ const RestoreComponent = ({
         onClick={async () => {
           setIsRestoring(true);
           await handleRestore();
-          if (folderId) await reRenderMidById(folderId);
-          else if (category) await reRenderMidByCategory(category);
           setIsRestoring(false);
         }}
         className={`bg-primary text-white rounded-md py-2 px-8 cursor-pointer ${isRestoring && "animate-pulse"}`}

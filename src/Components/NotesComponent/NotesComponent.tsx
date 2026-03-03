@@ -98,8 +98,11 @@ const NotesComponent = () => {
       setShowRestore(false);
       toast.success("Note Restored Successfully");
       setSingleNote((prev) => ({ ...prev!, deletedAt: "" }));
-      if (category) {
-        navigate(`/${category}`);
+      if (folderId) await reRenderMidById(folderId);
+      else if (category) {
+        navigate(
+          `/${singleNote?.folder.name}/${singleNote?.folderId}/note/${noteId}`,
+        );
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -112,14 +115,19 @@ const NotesComponent = () => {
 
   const handleFolderChange = async (newFolderId: string) => {
     if (!noteId) return;
+    const selectedFolder = folderList.find(
+      (folder) => folder.id === newFolderId,
+    );
+
+    console.log(selectedFolder?.name);
     try {
       await patchNoteFolder(noteId, newFolderId);
       toast.success("Folder Changed Successfully");
-      if (folderId) await reRenderMidById(folderId);
       setSingleNote((prev) => ({
         ...prev!,
         folder: { ...prev!.folder, id: newFolderId },
       }));
+      navigate(`/${selectedFolder?.name}/${newFolderId}/note/${noteId}`);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -156,8 +164,12 @@ const NotesComponent = () => {
           className="text-3xl font-medium outline-none w-[90%]"
           value={singleNote.title}
           onChange={(e) => {
+            if (e.target.value.trim().length > 80) {
+              toast.error("Title Should not be more than 80 character");
+              return;
+            }
             setSingleNote((prev) => ({ ...prev!, title: e.target.value }));
-            handleContentChange(e.target.value, singleNote.content);
+            handleContentChange(e.target.value.trim(), singleNote.content);
           }}
         />
         <button

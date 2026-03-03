@@ -44,7 +44,7 @@ const FolderComponent = () => {
   }, [fetchFolders]);
 
   useEffect(() => {
-    if (!folderList.length) return;
+    if (!folderList?.length) return;
 
     const firstFolder = folderList[0];
 

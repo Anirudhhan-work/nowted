@@ -40,8 +40,14 @@ const NotesDetails = () => {
   /* eslint-disable react-hooks/rules-of-hooks */
   useEffect(() => {
     if (search) reRenderBySearch(search);
-    else if (category) getNotesByCategory(category);
-    else if (folderId) getNotesById(folderId);
+    else if (category) {
+      console.log("useEffect category chaladi");
+      getNotesByCategory(category);
+    } else if (folderId) {
+      console.log("useEffect folderId chaladi");
+
+      getNotesById(folderId);
+    }
   }, [folderId, category, search]);
 
   return (
@@ -64,7 +70,7 @@ const NotesDetails = () => {
           </>
         ) : (
           <>
-            {notesList.length > 0 ? (
+            {notesList?.length > 0 ? (
               notesList.map((note) => (
                 <NotesCard
                   key={note.id}
