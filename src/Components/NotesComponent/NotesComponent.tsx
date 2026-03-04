@@ -99,10 +99,12 @@ const NotesComponent = () => {
       toast.success("Note Restored Successfully");
       setSingleNote((prev) => ({ ...prev!, deletedAt: "" }));
       if (folderId) await reRenderMidById(folderId);
-      else if (category) {
+      else if (category === "deleted") {
         navigate(
           `/${singleNote?.folder.name}/${singleNote?.folderId}/note/${noteId}`,
         );
+      } else if (category) {
+        await reRenderMidByCategory(category);
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -119,7 +121,6 @@ const NotesComponent = () => {
       (folder) => folder.id === newFolderId,
     );
 
-    console.log(selectedFolder?.name);
     try {
       await patchNoteFolder(noteId, newFolderId);
       toast.success("Folder Changed Successfully");

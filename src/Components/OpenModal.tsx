@@ -39,12 +39,14 @@ const OpenModal = ({
 
   const fetchPatchFavNote = async () => {
     try {
-      const res = await patchFavNote(noteId, !isFav);
+      await patchFavNote(noteId, !isFav);
       setIsFav((prev) => !prev);
-      if (category) await reRenderMidByCategory(category);
-      else if (folderId) await reRenderMidById(folderId);
-      if (category) navigate(`/${category}`);
-      toast.success(res);
+      if (category === "favorite") {
+        await reRenderMidByCategory(category);
+        if (category) navigate(`/${category}`);
+      }
+      // else if (folderId) await reRenderMidById(folderId);
+      toast.success(`Note marked as ${isFav ? "unfavorite" : "Favorite"}`);
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);
@@ -56,7 +58,7 @@ const OpenModal = ({
 
   const fetchPatchArchivedNote = async () => {
     try {
-      const res = await patchArchivedNote(noteId, !isArchive);
+      await patchArchivedNote(noteId, !isArchive);
       setIsArchive((prev) => !prev);
       if (category) {
         await reRenderMidByCategory(category);
@@ -66,7 +68,9 @@ const OpenModal = ({
         await reRenderMidById(folderId);
         navigate(`/${folderName}/${folderId}`);
       }
-      toast.success(res);
+      toast.success(
+        `Note ${isArchived ? "Unarchived" : "Archived"} successfully`,
+      );
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);

@@ -5,10 +5,12 @@ import { getResentNotes } from "../../../features/notes/NotesAPI";
 import type { NotesType } from "../../../features/notes/type";
 import TabButtonSkeleton from "../../TabButtonSkeleton";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const RecentComponent = () => {
   const [recentNotesList, setRecentNotesList] = useState<NotesType[]>([]);
   const [isRecentNotesLoading, setIsRecentNotesLoading] = useState(false);
+  const { noteId } = useParams();
 
   useEffect(() => {
     const fetchRecentNotes = async () => {
@@ -28,7 +30,7 @@ const RecentComponent = () => {
     };
 
     fetchRecentNotes();
-  }, []);
+  }, [noteId]);
   return (
     <section>
       <h3 className="text-sm text font-medium px-5 text-background-800">
