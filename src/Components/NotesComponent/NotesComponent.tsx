@@ -99,7 +99,7 @@ const NotesComponent = () => {
       toast.success("Note Restored Successfully");
       setSingleNote((prev) => ({ ...prev!, deletedAt: "" }));
       if (folderId) await reRenderMidById(folderId);
-      else if (category === "deleted") {
+      else if (category === "trash") {
         navigate(
           `/${singleNote?.folder.name}/${singleNote?.folderId}/note/${noteId}`,
         );
@@ -157,7 +157,7 @@ const NotesComponent = () => {
       />
     );
   return (
-    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar min-h-screen">
+    <section className="p-12 pb-0 w-full overflow-y-auto scrollbar h-screen">
       <div className="flex justify-between items-center">
         <input
           type="text"
@@ -222,7 +222,7 @@ const NotesComponent = () => {
         </select>
       </div>
       <textarea
-        className="w-full outline-none resize-none h-[calc(100vh-30%)]"
+        className="w-full outline-none resize-none h-[calc(100vh-32%)]"
         value={singleNote.content}
         onChange={(e) => {
           setSingleNote((prev) => ({ ...prev!, content: e.target.value }));

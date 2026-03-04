@@ -51,8 +51,8 @@ const NotesDetails = () => {
   }, [folderId, category, search]);
 
   return (
-    <section className="p-6 min-h-screen w-full bg-background-100">
-      <h1 className="text-xl font-medium flex items-end justify-between">
+    <section className="h-screen w-full bg-background-100 flex flex-col">
+      <h1 className="text-xl p-6 pt-10 font-medium flex items-end justify-between">
         {folderName ||
           (category === "favorite" && "Favorite Notes") ||
           (category === "deleted" && "Trashed Notes") ||
@@ -60,7 +60,8 @@ const NotesDetails = () => {
           (category === "s" && "Searched Notes")}
         <span className="text-xs text-gray-500">{totalNotes} Notes</span>
       </h1>
-      <div className="py-8 flex flex-col gap-6">
+
+      <div className="flex flex-col gap-6 overflow-y-auto scrollbar-mid flex-1 px-6">
         {isNoteLoading ? (
           <>
             <NotesDetailsSkeleton />

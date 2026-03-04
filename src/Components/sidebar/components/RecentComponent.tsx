@@ -37,17 +37,20 @@ const RecentComponent = () => {
         Recents
       </h3>
       <div className="flex flex-col gap-0.5 py-2">
-        {isRecentNotesLoading && <TabButtonSkeleton Icon={FileText} />}
-        {recentNotesList?.map((notes) => (
-          <TabButton
-            key={notes.id}
-            path={`${encodeURIComponent(notes.folder.name)}/${notes.folderId}/note/${notes.id}`}
-            icon={FileText}
-            activeIcon={BookOpenIcon}
-            label={notes.title || "Untitled Note"}
-            folderId={notes.folderId}
-          />
-        ))}
+        {isRecentNotesLoading ? (
+          <TabButtonSkeleton Icon={FileText} />
+        ) : (
+          recentNotesList?.map((notes) => (
+            <TabButton
+              key={notes.id}
+              path={`${encodeURIComponent(notes.folder.name)}/${notes.folderId}/note/${notes.id}`}
+              icon={FileText}
+              activeIcon={BookOpenIcon}
+              label={notes.title || "Untitled Note"}
+              folderId={notes.folderId}
+            />
+          ))
+        )}
       </div>
     </section>
   );

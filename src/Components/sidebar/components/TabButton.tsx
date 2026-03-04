@@ -80,6 +80,7 @@ const TabButton = ({
       const res = await deleteFolder(folderId);
       toast.success(res);
       reloadData?.();
+      navigate("/");
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message);

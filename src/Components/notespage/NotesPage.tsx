@@ -5,12 +5,14 @@ import NotesTemplate from "./components/NotesTemplate";
 const NotesPage = () => {
   const { noteId } = useParams();
   return (
-    <section className="flex h-screen ">
-      <div className="lg:w-[30.7%] w-[40%] h-screen overflow-y-auto scrollbar">
+    <section className="flex h-screen">
+      <div className="lg:w-[28.7%] w-[40%]">
         <NotesDetails />
       </div>
 
-      <div className="flex-1">{noteId ? <Outlet /> : <NotesTemplate />}</div>
+      <div className="flex-1 h-screen">
+        {noteId ? <Outlet /> : <NotesTemplate />}
+      </div>
     </section>
   );
 };

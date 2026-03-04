@@ -62,7 +62,7 @@ const NotesCard = ({
           className={`shadow-lg p-4 rounded-sm group ${
             isActive
               ? "bg-primary text-white shadow-black/20"
-              : "bg-background-400 hover:bg-background-500/40"
+              : "bg-background-400 dark:hover:bg-background-500/40 hover:bg-[#a1a1aa]/40"
           }`}
         >
           <div className="flex justify-between items-center">
