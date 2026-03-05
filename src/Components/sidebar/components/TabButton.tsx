@@ -103,9 +103,13 @@ const TabButton = ({
       {({ isActive }) => (
         <>
           {isActive && ActiveIcon ? (
-            <ActiveIcon size={20} />
+            <div>
+              <ActiveIcon size={20} />
+            </div>
           ) : (
-            <Icon size={20} />
+            <div>
+              <Icon size={20} />
+            </div>
           )}
           {editable && edit ? (
             <input
@@ -122,8 +126,10 @@ const TabButton = ({
               onChange={(e) => setInput(e.target.value)}
             />
           ) : (
-            <span className="flex justify-between w-full items-center">
-              <p className="truncate">{input}</p>
+            <span className="flex justify-between w-full items-center ">
+              <div className="w-50">
+                <p className="truncate">{input}</p>
+              </div>
               {editable && !isDeleting && (
                 <Trash2
                   size={17}

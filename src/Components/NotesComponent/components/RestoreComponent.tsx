@@ -15,18 +15,22 @@ const RestoreComponent = ({
   return (
     <section className="p-12 pb-0 w-full flex justify-center items-center flex-col gap-5 min-h-screen">
       <History size={90} strokeWidth={0.5} />
-      <h1 className="text-3xl font-medium">Restore “{title}”</h1>
+      <div className="w-full flex justify-center">
+        <h1 className="text-3xl font-medium truncate">Restore “{title}”</h1>
+      </div>
       <p className="text-center text-background-700">
         Don't want to lose this note? It's not too late! Just click the
         'Restore' <br /> button and it will be added back to your list. It's
         that simple.
       </p>
-      <div className="flex items-center gap-10">
+      <div className="flex items-center justify-center gap-10 w-full">
         <div className="text-background-700 flex items-center gap-5">
           <Folder size={20} />
           <h3 className="text-xs font-semibold tracking-wider">Folder</h3>
         </div>
-        <p className="text-white text-sm font-medium underline">{folderName}</p>
+        <p className="text-white text-sm font-medium underline truncate">
+          {folderName}
+        </p>
       </div>
       <button
         disabled={isRestoring}

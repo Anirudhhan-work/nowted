@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import logo from "../../../assets/nowtedlogo.svg";
 import { useState } from "react";
 import AddNoteButton from "./AddNoteButton";
@@ -14,10 +14,19 @@ const HeadComponent = () => {
         className={`flex justify-between items-center dark:invert-0 invert-75 px-5`}
       >
         <img src={logo} alt="nowted logo" />
-        <Search
-          className="text-background-800 cursor-pointer"
-          onClick={() => setShowSearchBar((prev) => !prev)}
-        />
+        {!showSearchBar ? (
+          <Search
+            className="text-background-800 cursor-pointer"
+            onClick={() => {
+              setShowSearchBar(true);
+            }}
+          />
+        ) : (
+          <X
+            className="text-background-800 cursor-pointer"
+            onClick={() => setShowSearchBar(false)}
+          />
+        )}
       </div>
       {showSearchBar ? <SearchBar /> : <AddNoteButton />}
     </section>

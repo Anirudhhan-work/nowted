@@ -13,7 +13,7 @@ export const getResentNotes = async () => {
 
 export const getNotesByFolderId = async (folderId: string) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
-    params: { folderId },
+    params: { folderId, limit: "all" },
   });
   return res.data;
 };

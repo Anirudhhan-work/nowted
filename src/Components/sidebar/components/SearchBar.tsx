@@ -1,15 +1,22 @@
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks";
 
 const SearchBar = () => {
   const [searhParams] = useSearchParams();
+  const searchRef = useRef<HTMLInputElement>(null);
   const [searchInput, setSearchInput] = useState(
     searhParams.get("search") || "",
   );
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!searchRef.current?.value) {
+      searchRef.current?.focus();
+    }
+  }, []);
 
   const handleSearch = useDebounce((searchValue: string) => {
     const params = new URLSearchParams(location.search);
@@ -28,6 +35,7 @@ const SearchBar = () => {
       <Search className="absolute left-8" size={20} />
       <input
         value={searchInput}
+        ref={searchRef}
         onChange={(e) => {
           setSearchInput(e.target.value);
           handleSearch(e.target.value);

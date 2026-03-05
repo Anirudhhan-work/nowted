@@ -10,7 +10,7 @@ const NotesPage = () => {
         <NotesDetails />
       </div>
 
-      <div className="flex-1 h-screen">
+      <div className="flex-1 h-screen w-10">
         {noteId ? <Outlet /> : <NotesTemplate />}
       </div>
     </section>

@@ -52,14 +52,16 @@ const NotesDetails = () => {
 
   return (
     <section className="h-screen w-full bg-background-100 flex flex-col">
-      <h1 className="text-xl p-6 pt-10 font-medium flex items-end justify-between">
-        {folderName ||
-          (category === "favorite" && "Favorite Notes") ||
-          (category === "deleted" && "Trashed Notes") ||
-          (category === "archived" && "Archived Notes") ||
-          (category === "s" && "Searched Notes")}
+      <div className="flex items-end justify-between p-6 pt-10">
+        <h1 className="text-xl font-medium truncate w-[60%]">
+          {folderName ||
+            (category === "favorite" && "Favorite Notes") ||
+            (category === "deleted" && "Trashed Notes") ||
+            (category === "archived" && "Archived Notes") ||
+            (category === "s" && "Searched Notes")}
+        </h1>
         <span className="text-xs text-gray-500">{totalNotes} Notes</span>
-      </h1>
+      </div>
 
       <div className="flex flex-col gap-6 overflow-y-auto scrollbar-mid flex-1 px-6">
         {isNoteLoading ? (
@@ -76,7 +78,11 @@ const NotesDetails = () => {
                 <NotesCard
                   key={note.id}
                   note={note}
-                  path={`note/${note.id}`}
+                  path={
+                    category === "s"
+                      ? `/${note.folder.name}/${note.folderId}/note/${note.id}`
+                      : `note/${note.id}`
+                  }
                   reload={() =>
                     (folderId && reRenderMidById(folderId)) ||
                     (category && reRenderMidByCategory(category))

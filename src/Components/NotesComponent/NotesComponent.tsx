@@ -99,7 +99,7 @@ const NotesComponent = () => {
       toast.success("Note Restored Successfully");
       setSingleNote((prev) => ({ ...prev!, deletedAt: "" }));
       if (folderId) await reRenderMidById(folderId);
-      else if (category === "trash") {
+      else if (category === "deleted") {
         navigate(
           `/${singleNote?.folder.name}/${singleNote?.folderId}/note/${noteId}`,
         );
