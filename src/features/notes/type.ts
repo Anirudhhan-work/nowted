@@ -27,14 +27,11 @@ export interface SingleNoteResType {
   note: NotesType;
 }
 
-export interface CreateNoteType {
-  id: string;
-}
+export type CreateNoteType = Pick<NotesType, "id">;
 
-export type PatchNoteType = {
-  title?: string;
-  content?: string;
-  isFavorite?: boolean;
-  isArchived?: boolean;
-  folderId?: string;
-};
+export type PatchNoteType = Partial<
+  Pick<
+    NotesType,
+    "title" | "content" | "isFavorite" | "isArchived" | "folderId"
+  >
+>;

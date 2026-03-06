@@ -3,7 +3,7 @@ import TabButton from "./TabButton";
 import { useEffect, useState } from "react";
 import { getResentNotes } from "../../../features/notes/NotesAPI";
 import type { NotesType } from "../../../features/notes/type";
-import TabButtonSkeleton from "../../TabButtonSkeleton";
+import TabButtonSkeleton from "../../skeleton/TabButtonSkeleton";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 

@@ -1,9 +1,10 @@
 import { Archive, Loader2, PackageOpen, Star, Trash } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { NoteContext } from "../context/Notes/NoteContext";
+import { NoteContext } from "../../context/Notes/NoteContext";
 import toast from "react-hot-toast";
-import { patchNote } from "../features/notes/NotesAPI";
+import { patchNote } from "../../features/notes/NotesAPI";
+import ConfirmationModal from "./ConfirmationModal";
 
 const OpenModal = ({
   handleDelete,
@@ -24,10 +25,26 @@ const OpenModal = ({
   const [isFav, setIsFav] = useState(isFavorite);
   const [isArchive, setIsArchive] = useState(isArchived);
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     modalRef.current?.focus();
   }, []);
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await handleDelete();
+
+      if (category) await reRenderMidByCategory(category);
+      else if (folderId) await reRenderMidById(folderId);
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message);
+      else toast.error("Something went wrong");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const context = useContext(NoteContext);
 
@@ -128,17 +145,7 @@ const OpenModal = ({
 
       <button
         disabled={isDeleting}
-        onClick={async () => {
-          setIsDeleting(true);
-          try {
-            await handleDelete();
-
-            if (category) await reRenderMidByCategory(category);
-            else if (folderId) await reRenderMidById(folderId);
-          } finally {
-            setIsDeleting(false);
-          }
-        }}
+        onClick={() => setShowDeleteModal(true)}
         className="modal-item hover:text-red-600"
       >
         {isDeleting ? (
@@ -148,6 +155,17 @@ const OpenModal = ({
         )}
         <span>Delete</span>
       </button>
+      {showDeleteModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this note?"
+          onConfirm={() => {
+            setShowDeleteModal(false);
+            confirmDelete();
+          }}
+          onCancel={() => setShowDeleteModal(false)}
+          type="Note"
+        />
+      )}
     </div>
   );
 };

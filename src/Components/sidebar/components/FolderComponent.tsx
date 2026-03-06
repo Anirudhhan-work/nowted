@@ -2,7 +2,7 @@ import { Folder, FolderOpen, FolderPlus } from "lucide-react";
 import TabButton from "./TabButton";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { createFolder, getFolders } from "../../../features/folders/folderAPI";
-import TabButtonSkeleton from "../../TabButtonSkeleton";
+import TabButtonSkeleton from "../../skeleton/TabButtonSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { NoteContext } from "../../../context/Notes/NoteContext";

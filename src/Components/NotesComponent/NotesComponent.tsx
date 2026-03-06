@@ -9,15 +9,18 @@ import {
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
-import OpenModal from "../OpenModal";
+import OpenModal from "../modal/OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
 import { useDebounce } from "../../utils/hooks";
 import { NoteContext } from "../../context/Notes/NoteContext";
+import ConfirmationModal from "../modal/ConfirmationModal";
 
 const NotesComponent = () => {
   const { noteId, category, folderId } = useParams();
   const [singleNote, setSingleNote] = useState<NotesType>();
+  const [newFolderID, setNewFolderID] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showMoveModal, setShowMoveModal] = useState(false);
   const [showRestore, setShowRestore] = useState(false);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
@@ -211,7 +214,10 @@ const NotesComponent = () => {
           disabled={category === "archived"}
           className="h-10 text-sm font-medium underline outline-none cursor-pointer bg-background text-color"
           value={singleNote.folder.id}
-          onChange={(e) => handleFolderChange(e.target.value)}
+          onChange={(e) => {
+            setShowMoveModal(true);
+            setNewFolderID(e.target.value);
+          }}
         >
           {folderList?.map((folder) => (
             <option key={folder.id} value={folder.id} className="bg-background">
@@ -234,6 +240,17 @@ const NotesComponent = () => {
           <Loader2 size={15} className="animate-spin" />
           saving..
         </div>
+      )}
+      {showMoveModal && (
+        <ConfirmationModal
+          message="Are you sure you want to move this note to onther folder?"
+          onConfirm={() => {
+            setShowMoveModal(false);
+            handleFolderChange(newFolderID);
+          }}
+          onCancel={() => setShowMoveModal(false)}
+          type="Move"
+        />
       )}
     </section>
   );

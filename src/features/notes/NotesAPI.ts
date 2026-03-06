@@ -52,15 +52,11 @@ export const createNote = async (
   folderId: string,
   title: string,
   content: string,
-  isFavorite: boolean,
-  isArchived: boolean,
 ) => {
   const res = await axiosInstance.post<CreateNoteType>(`notes`, {
     folderId,
     title,
     content,
-    isFavorite,
-    isArchived,
   });
 
   return res.data;

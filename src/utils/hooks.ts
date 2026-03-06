@@ -4,7 +4,7 @@ export const useDebounce = <T>(
   callback: (...args: T[]) => void,
   time: number,
 ) => {
-  const timerRef = useRef<number>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   return function (...args: T[]) {
     if (timerRef.current) clearTimeout(timerRef.current);

@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import NotesCard, { NotesDetailsSkeleton } from "./NotesCard";
+import NotesCard from "./NotesCard";
 import toast from "react-hot-toast";
 import { NoteContext } from "../../../context/Notes/NoteContext";
+import NotesDetailsSkeleton from "../../skeleton/NotesDetailsSkeleton";
 
 const NotesDetails = () => {
   const { folderId, folderName, category } = useParams();

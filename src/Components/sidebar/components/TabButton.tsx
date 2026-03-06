@@ -6,6 +6,7 @@ import {
   renameFolder,
 } from "../../../features/folders/folderAPI";
 import toast from "react-hot-toast";
+import ConfirmationModal from "../../modal/ConfirmationModal";
 
 interface TabButtonProps {
   path: string;
@@ -28,6 +29,7 @@ const TabButton = ({
 }: TabButtonProps) => {
   const [input, setInput] = useState(label);
   const [edit, setEdit] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -93,62 +95,75 @@ const TabButton = ({
   };
 
   return (
-    <NavLink
-      to={path}
-      onDoubleClick={handleDoubleClick}
-      className={({ isActive }) =>
-        `tab-btn group ${isActive ? "bg-primary rounded-sm text-white" : "hover:bg-background-400 text-background-700"}`
-      }
-    >
-      {({ isActive }) => (
-        <>
-          {isActive && ActiveIcon ? (
-            <div>
-              <ActiveIcon size={20} />
-            </div>
-          ) : (
-            <div>
-              <Icon size={20} />
-            </div>
-          )}
-          {editable && edit ? (
-            <input
-              type="text"
-              value={input}
-              ref={inputRef}
-              className="outline-none bg-transparent w-full"
-              onBlur={() => handleBlur()}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  inputRef.current?.blur();
-                }
-              }}
-              onChange={(e) => setInput(e.target.value)}
-            />
-          ) : (
-            <span className="flex justify-between w-full items-center ">
-              <div className="w-50">
-                <p className="truncate">{input}</p>
+    <>
+      <NavLink
+        to={path}
+        onDoubleClick={handleDoubleClick}
+        className={({ isActive }) =>
+          `tab-btn group ${isActive ? "bg-primary rounded-sm text-white" : "hover:bg-background-400 text-background-700"}`
+        }
+      >
+        {({ isActive }) => (
+          <>
+            {isActive && ActiveIcon ? (
+              <div>
+                <ActiveIcon size={20} />
               </div>
-              {editable && !isDeleting && (
-                <Trash2
-                  size={17}
-                  className="group-hover:block hover:text-red-500 hidden"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleDeleteFolder();
-                  }}
-                />
-              )}
-              {isDeleting && (
-                <Loader2 size={20} className="animate-spin text-red-500" />
-              )}
-            </span>
-          )}
-        </>
+            ) : (
+              <div>
+                <Icon size={20} />
+              </div>
+            )}
+            {editable && edit ? (
+              <input
+                type="text"
+                value={input}
+                ref={inputRef}
+                className="outline-none bg-transparent w-full"
+                onBlur={() => handleBlur()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    inputRef.current?.blur();
+                  }
+                }}
+                onChange={(e) => setInput(e.target.value)}
+              />
+            ) : (
+              <span className="flex justify-between w-full items-center ">
+                <div className="w-50">
+                  <p className="truncate">{input}</p>
+                </div>
+                {editable && !isDeleting && (
+                  <Trash2
+                    size={17}
+                    className="group-hover:block hover:text-red-500 hidden"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowDeleteModal(true);
+                    }}
+                  />
+                )}
+                {isDeleting && (
+                  <Loader2 size={20} className="animate-spin text-red-500" />
+                )}
+              </span>
+            )}
+          </>
+        )}
+      </NavLink>
+      {showDeleteModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this Folder?"
+          onConfirm={() => {
+            setShowDeleteModal(false);
+            handleDeleteFolder();
+          }}
+          onCancel={() => setShowDeleteModal(false)}
+          type="Folder"
+        />
       )}
-    </NavLink>
+    </>
   );
 };
 

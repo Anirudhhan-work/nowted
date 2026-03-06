@@ -21,7 +21,7 @@ const AddNoteButton = () => {
     setIsNoteAdding(true);
 
     try {
-      const res = await createNote(folderId, "", "", false, false);
+      const res = await createNote(folderId, "", "");
       reRenderMidById(folderId);
       await navigate(`${folderName}/${folderId}/note/${res.id}`);
       toast.success("Note Created Successfully");
