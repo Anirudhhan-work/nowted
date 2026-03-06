@@ -12,16 +12,20 @@ const OpenModal = ({
   isFavorite,
   isArchived,
   onClose,
+  folderName,
+  folderId,
 }: {
   handleDelete: () => Promise<void>;
   isFavorite: boolean;
   noteId: string;
+  folderId: string;
+  folderName: string;
   isArchived: boolean;
   onClose: () => void;
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { folderId, category, folderName } = useParams();
+  const { category } = useParams();
   const [isFav, setIsFav] = useState(isFavorite);
   const [isArchive, setIsArchive] = useState(isArchived);
   const navigate = useNavigate();
@@ -78,10 +82,8 @@ const OpenModal = ({
       await patchNote(noteId, { isArchived: !isArchive });
       setIsArchive((prev) => !prev);
       if (category) {
-        await reRenderMidByCategory(category);
-        navigate(`/${category}`);
-      }
-      if (folderId && folderName) {
+        navigate(`/${folderName}/${folderId}/note/${noteId}`);
+      } else if (folderId && folderName) {
         await reRenderMidById(folderId);
         navigate(`/${folderName}/${folderId}`);
       }

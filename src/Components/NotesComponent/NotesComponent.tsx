@@ -189,6 +189,8 @@ const NotesComponent = () => {
           <OpenModal
             isFavorite={singleNote.isFavorite}
             noteId={noteId}
+            folderId={singleNote.folderId}
+            folderName={singleNote.folder.name}
             isArchived={singleNote.isArchived}
             handleDelete={deleteNote}
             onClose={() => setIsModalOpen(false)}
@@ -243,7 +245,7 @@ const NotesComponent = () => {
       )}
       {showMoveModal && (
         <ConfirmationModal
-          message="Are you sure you want to move this note to onther folder?"
+          message="Are you sure you want to move this note to another folder?"
           onConfirm={() => {
             setShowMoveModal(false);
             handleFolderChange(newFolderID);
