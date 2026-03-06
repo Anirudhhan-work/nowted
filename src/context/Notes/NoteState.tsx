@@ -13,42 +13,58 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [notesList, setNotesList] = useState<NotesType[]>([]);
   const [totalNotes, setTotalNotes] = useState(0);
   const [folderList, setFolderList] = useState<FolderType[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [categoryHasMore, setCategoryHasMore] = useState(true);
 
   const setFolderListState = (folders: FolderType[]) => {
     setFolderList(folders);
   };
 
-  const reRenderMidById = useCallback(async (folderId: string) => {
-    console.log("Id chal pada");
-    try {
-      const { notes, total } = await getNotesByFolderId(folderId);
-      setNotesList(notes);
-      setTotalNotes(total);
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message);
-      } else {
-        toast.error("Something went wrong");
+  const reRenderMidById = useCallback(
+    async (folderId: string, pageNumber = 1) => {
+      try {
+        const { notes, total } = await getNotesByFolderId(folderId, pageNumber);
+
+        if (pageNumber === 1) {
+          setNotesList(notes);
+        } else {
+          setNotesList((prev) => [...prev, ...notes]);
+        }
+
+        setTotalNotes(total);
+        setHasMore(notes.length === 10);
+        setPage(pageNumber);
+      } catch (e) {
+        if (e instanceof Error) toast.error(e.message);
+        else toast.error("Something went wrong");
       }
-    }
-  }, []);
+    },
+    [],
+  );
 
-  const reRenderMidByCategory = useCallback(async (category: string) => {
-    console.log("Category chal pada");
+  const reRenderMidByCategory = useCallback(
+    async (category: string, pageNumber = 1) => {
+      try {
+        const { notes, total } = await getNotesByCategory(category, pageNumber);
 
-    try {
-      const { notes, total } = await getNotesByCategory(category);
-      setNotesList(notes);
-      setTotalNotes(total);
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message);
-      } else {
-        toast.error("something went wrong");
+        if (pageNumber === 1) {
+          setNotesList(notes);
+        } else {
+          setNotesList((prev) => [...prev, ...notes]);
+        }
+
+        setTotalNotes(total);
+        setCategoryHasMore(notes.length === 10);
+        setCategoryPage(pageNumber);
+      } catch (e) {
+        if (e instanceof Error) toast.error(e.message);
+        else toast.error("something went wrong");
       }
-    }
-  }, []);
-
+    },
+    [],
+  );
   const reRenderBySearch = useCallback(async (search: string) => {
     if (!search || search.trim() === "") {
       setNotesList([]);
@@ -79,6 +95,10 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         reRenderMidById,
         reRenderMidByCategory,
         reRenderBySearch,
+        page,
+        hasMore,
+        categoryPage,
+        categoryHasMore,
       }}
     >
       {children}

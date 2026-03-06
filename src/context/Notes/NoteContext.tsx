@@ -6,9 +6,13 @@ type NoteContextType = {
   notesList: NotesType[];
   folderList: FolderType[];
   totalNotes: number;
+  page: number;
+  hasMore: boolean;
+  categoryPage: number;
+  categoryHasMore: boolean;
   setFolderListState: (folders: FolderType[]) => void;
-  reRenderMidById: (folderId: string) => Promise<void>;
-  reRenderMidByCategory: (category: string) => Promise<void>;
+  reRenderMidById: (folderId: string, page?: number) => Promise<void>;
+  reRenderMidByCategory: (category: string, page?: number) => Promise<void>;
   reRenderBySearch: (search: string) => Promise<void>;
 };
 

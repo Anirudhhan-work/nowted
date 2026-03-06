@@ -11,10 +11,15 @@ export const getResentNotes = async () => {
   return res.data;
 };
 
-export const getNotesByFolderId = async (folderId: string) => {
+export const getNotesByFolderId = async (
+  folderId: string,
+  page = 1,
+  limit = 10,
+) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
-    params: { folderId, limit: "all" },
+    params: { folderId, page, limit },
   });
+
   return res.data;
 };
 
@@ -27,11 +32,16 @@ export const deleteNoteById = async (noteId: string) => {
   const res = await axiosInstance.delete<string>(`notes/${noteId}`);
   return res.data;
 };
-export const getNotesByCategory = async (category: string) => {
+export const getNotesByCategory = async (
+  category: string,
+  page = 1,
+  limit = 10,
+) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
     params: {
       [category]: true,
-      limit: "all",
+      page,
+      limit,
     },
   });
   return res.data;

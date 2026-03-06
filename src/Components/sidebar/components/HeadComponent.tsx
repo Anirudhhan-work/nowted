@@ -3,10 +3,11 @@ import logo from "../../../assets/nowtedlogo.svg";
 import { useState } from "react";
 import AddNoteButton from "./AddNoteButton";
 import SearchBar from "./SearchBar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const HeadComponent = () => {
   const { category } = useParams();
   const [showSearchBar, setShowSearchBar] = useState(category === "s");
+  const navigate = useNavigate();
 
   return (
     <section>
@@ -24,7 +25,10 @@ const HeadComponent = () => {
         ) : (
           <X
             className="text-background-800 cursor-pointer"
-            onClick={() => setShowSearchBar(false)}
+            onClick={() => {
+              setShowSearchBar(false);
+              if (category === "s") navigate("/");
+            }}
           />
         )}
       </div>

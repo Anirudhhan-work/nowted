@@ -28,7 +28,7 @@ const RestoreComponent = ({
           <Folder size={20} />
           <h3 className="text-xs font-semibold tracking-wider">Folder</h3>
         </div>
-        <p className="text-white text-sm font-medium underline truncate">
+        <p className="text-color text-sm font-medium underline truncate">
           {folderName}
         </p>
       </div>
@@ -41,7 +41,7 @@ const RestoreComponent = ({
         }}
         className={`bg-primary text-white rounded-md py-2 px-8 cursor-pointer ${isRestoring && "animate-pulse"}`}
       >
-        Restore
+        {isRestoring ? "Restoring.." : "Restore"}
       </button>
     </section>
   );
