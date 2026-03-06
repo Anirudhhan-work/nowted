@@ -81,7 +81,7 @@ const FolderComponent = () => {
   };
 
   return (
-    <section className="py-4">
+    <section className="py-4 min-h-0 flex flex-col">
       <div className="flex justify-between px-5 items-center text-background-800 py-2">
         <h3 className="text-sm font-medium">Folders</h3>
         <FolderPlus
@@ -91,7 +91,7 @@ const FolderComponent = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-0.5 h-62 overflow-y-auto scrollbar py-1">
+      <div className="flex flex-col gap-0.5 min-h-0 overflow-y-auto scrollbar py-1">
         {folderList?.map((folder) => (
           <TabButton
             path={`/${encodeURIComponent(folder.name)}/${folder.id}`}
@@ -104,7 +104,13 @@ const FolderComponent = () => {
             folderId={folder.id}
           />
         ))}
-        {isFolderLoading && <TabButtonSkeleton Icon={Folder} />}
+        {isFolderLoading && (
+          <>
+            <TabButtonSkeleton Icon={Folder} />
+            <TabButtonSkeleton Icon={Folder} />
+            <TabButtonSkeleton Icon={Folder} />
+          </>
+        )}
       </div>
     </section>
   );

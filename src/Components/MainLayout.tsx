@@ -13,7 +13,7 @@ const MainLayout = () => {
 
   return (
     <div
-      className={`w-full bg-background min-h-screen dark:text-white flex  text-blue ${darkMode && "dark"}`}
+      className={`w-full bg-background overflow-hidden h-screen dark:text-white flex  text-blue ${darkMode && "dark"}`}
     >
       <div className="w-[18%]">
         <SideBar />
