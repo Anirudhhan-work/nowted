@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { NoteContext } from "../context/Notes/NoteContext";
 import toast from "react-hot-toast";
-import { patchArchivedNote, patchFavNote } from "../features/notes/NotesAPI";
+import { patchNote } from "../features/notes/NotesAPI";
 
 const OpenModal = ({
   handleDelete,
@@ -39,7 +39,7 @@ const OpenModal = ({
 
   const fetchPatchFavNote = async () => {
     try {
-      await patchFavNote(noteId, !isFav);
+      await patchNote(noteId, { isFavorite: !isFav });
       setIsFav((prev) => !prev);
       if (category === "favorite") {
         await reRenderMidByCategory(category);
@@ -58,7 +58,7 @@ const OpenModal = ({
 
   const fetchPatchArchivedNote = async () => {
     try {
-      await patchArchivedNote(noteId, !isArchive);
+      await patchNote(noteId, { isArchived: !isArchive });
       setIsArchive((prev) => !prev);
       if (category) {
         await reRenderMidByCategory(category);

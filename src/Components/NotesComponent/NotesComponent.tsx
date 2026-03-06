@@ -6,7 +6,6 @@ import {
   deleteNoteById,
   getNoteById,
   patchNote,
-  patchNoteFolder,
   restoreNote,
 } from "../../features/notes/NotesAPI";
 import { type NotesType } from "../../features/notes/type";
@@ -59,7 +58,7 @@ const NotesComponent = () => {
 
       setSaving(true);
       try {
-        await patchNote(noteId, title, content);
+        await patchNote(noteId, { title: title, content: content });
         if (folderId) reRenderMidById(folderId);
         else if (category) reRenderMidByCategory(category);
       } catch (e) {
@@ -122,7 +121,7 @@ const NotesComponent = () => {
     );
 
     try {
-      await patchNoteFolder(noteId, newFolderId);
+      await patchNote(noteId, { folderId: newFolderId });
       toast.success("Folder Changed Successfully");
       setSingleNote((prev) => ({
         ...prev!,

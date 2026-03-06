@@ -4,6 +4,7 @@ import {
   type NotesResType,
   type RecentNotesResType,
   type CreateNoteType,
+  type PatchNoteType,
 } from "./type";
 
 export const getResentNotes = async () => {
@@ -65,39 +66,8 @@ export const createNote = async (
   return res.data;
 };
 
-export const patchFavNote = async (noteId: string, isFavorite: boolean) => {
-  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
-    isFavorite,
-  });
-  return res.data;
-};
-
-export const patchArchivedNote = async (
-  noteId: string,
-  isArchived: boolean,
-) => {
-  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
-    isArchived,
-  });
-  return res.data;
-};
-
-export const patchNote = async (
-  noteId: string,
-  title: string,
-  content: string,
-) => {
-  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
-    title,
-    content,
-  });
-  return res.data;
-};
-
-export const patchNoteFolder = async (noteId: string, folderId: string) => {
-  const res = await axiosInstance.patch<string>(`notes/${noteId}`, {
-    folderId,
-  });
+export const patchNote = async (noteId: string, details: PatchNoteType) => {
+  const res = await axiosInstance.patch<string>(`notes/${noteId}`, details);
   return res.data;
 };
 

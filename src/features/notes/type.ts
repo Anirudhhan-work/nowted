@@ -30,3 +30,11 @@ export interface SingleNoteResType {
 export interface CreateNoteType {
   id: string;
 }
+
+export type PatchNoteType = {
+  title?: string;
+  content?: string;
+  isFavorite?: boolean;
+  isArchived?: boolean;
+  folderId?: string;
+};
