@@ -24,8 +24,10 @@ export const getNotesByFolderId = async (
   return res.data;
 };
 
-export const getNoteById = async (noteId: string) => {
-  const res = await axiosInstance.get<SingleNoteResType>(`notes/${noteId}`);
+export const getNoteById = async (noteId: string, signal?: AbortSignal) => {
+  const res = await axiosInstance.get<SingleNoteResType>(`notes/${noteId}`, {
+    signal,
+  });
   return res.data;
 };
 

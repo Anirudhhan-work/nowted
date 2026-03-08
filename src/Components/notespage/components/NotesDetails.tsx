@@ -52,8 +52,15 @@ const NotesDetails = () => {
   }, [canLoadMore, isNoteLoading, folderId, category, currentPage]);
 
   useEffect(() => {
-    const sentinel = loaderRef.current;
-    if (!sentinel) return;
+    if (search)
+      reRenderBySearch(search); //TODO: add abortcontroller here too
+    else if (category)
+      getNotesByCategory(category); //TODO: add abortcontroller here too
+    else if (folderId) getNotesById(folderId, 1);
+  }, [folderId, category, search]);
+
+  useEffect(() => {
+    if (!loaderRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,15 +69,9 @@ const NotesDetails = () => {
       { threshold: 0.1 },
     );
 
-    observer.observe(sentinel);
+    observer.observe(loaderRef.current);
     return () => observer.disconnect();
   }, [handleLoadMore]);
-
-  useEffect(() => {
-    if (search) reRenderBySearch(search);
-    else if (category) getNotesByCategory(category);
-    else if (folderId) getNotesById(folderId, 1);
-  }, [folderId, category, search]);
 
   return (
     <section className="h-screen w-full bg-background-100 flex flex-col">
@@ -115,7 +116,7 @@ const NotesDetails = () => {
 
                 <div ref={loaderRef} className="py-2">
                   {!hasMore && notesList.length > 0 && (
-                    <p className="text-center text-xs text-background-700 pb-4">
+                    <p className="text-xs text-background-700 text-center ">
                       All notes loaded
                     </p>
                   )}

@@ -81,8 +81,11 @@ const OpenModal = ({
     try {
       await patchNote(noteId, { isArchived: !isArchive });
       setIsArchive((prev) => !prev);
-      if (category) {
+      if (category === "archived") {
         navigate(`/${folderName}/${folderId}/note/${noteId}`);
+      } else if (category) {
+        await reRenderMidByCategory(category);
+        navigate(`/${category}`);
       } else if (folderId && folderName) {
         await reRenderMidById(folderId);
         navigate(`/${folderName}/${folderId}`);

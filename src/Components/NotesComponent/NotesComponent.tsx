@@ -14,23 +14,29 @@ import RestoreComponent from "./components/RestoreComponent";
 import { useDebounce } from "../../utils/hooks";
 import { NoteContext } from "../../context/Notes/NoteContext";
 import ConfirmationModal from "../modal/ConfirmationModal";
+import NotesSkeleton from "../skeleton/NotesSkeleton";
 
 const NotesComponent = () => {
   const { noteId, category, folderId } = useParams();
-  const [singleNote, setSingleNote] = useState<NotesType>();
+  const [singleNote, setSingleNote] = useState<NotesType | null>(null);
   const [newFolderID, setNewFolderID] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showMoveModal, setShowMoveModal] = useState(false);
   const [showRestore, setShowRestore] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isNotesLoading, setIsNotesLoading] = useState(false);
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchSingeNote = async () => {
       if (!noteId) return toast.error("Something went wrong");
+      setIsNotesLoading(true);
+      setSingleNote(null);
       try {
-        const { note } = await getNoteById(noteId);
+        const { note } = await getNoteById(noteId, controller.signal);
         setShowRestore(false);
         setSingleNote(note);
         if (!note.title) {
@@ -38,14 +44,19 @@ const NotesComponent = () => {
         }
       } catch (e) {
         if (e instanceof Error) {
+          // toast.error(typeof e + " ye de raha");
+          if (e.message === "canceled") return;
           toast.error(e.message);
         } else {
-          toast.error("Something went wrong");
+          toast.error(typeof e);
         }
+      } finally {
+        setIsNotesLoading(false);
       }
     };
 
     fetchSingeNote();
+    return () => controller.abort();
   }, [noteId]);
 
   // const handleContentChange = useDebounce((value: string) => {
@@ -148,7 +159,9 @@ const NotesComponent = () => {
   }
   const { reRenderMidById, reRenderMidByCategory, folderList } = context;
 
-  if (singleNote === undefined || !noteId) return null;
+  if (!noteId) return null;
+
+  if (singleNote == null || isNotesLoading) return <NotesSkeleton />;
 
   if (category === "deleted" || showRestore || singleNote.deletedAt)
     return (
