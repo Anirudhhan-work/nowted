@@ -11,8 +11,16 @@ type NoteContextType = {
   categoryPage: number;
   categoryHasMore: boolean;
   setFolderListState: (folders: FolderType[]) => void;
-  reRenderMidById: (folderId: string, page?: number) => Promise<void>;
-  reRenderMidByCategory: (category: string, page?: number) => Promise<void>;
+  reRenderMidById: (
+    folderId: string,
+    page?: number,
+    signal?: AbortSignal,
+  ) => Promise<void>;
+  reRenderMidByCategory: (
+    category: string,
+    page?: number,
+    signal?: AbortSignal,
+  ) => Promise<void>;
   reRenderBySearch: (search: string) => Promise<void>;
 };
 

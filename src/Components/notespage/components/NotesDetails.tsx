@@ -28,23 +28,32 @@ const NotesDetails = () => {
     categoryHasMore,
   } = context;
 
-  const getNotesById = async (folderId: string, pageNumber = 1) => {
+  const getNotesById = async (
+    folderId: string,
+    pageNumber = 1,
+    signal?: AbortSignal,
+  ) => {
     if (pageNumber === 1) setIsNoteLoading(true);
-    await reRenderMidById(folderId, pageNumber);
+    await reRenderMidById(folderId, pageNumber, signal);
     if (pageNumber === 1) setIsNoteLoading(false);
   };
 
   const canLoadMore = folderId ? hasMore : categoryHasMore;
   const currentPage = folderId ? page : categoryPage;
 
-  const getNotesByCategory = async (category: string, pageNumber = 1) => {
+  const getNotesByCategory = async (
+    category: string,
+    pageNumber = 1,
+    signal?: AbortSignal,
+  ) => {
     if (pageNumber === 1) setIsNoteLoading(true);
-    await reRenderMidByCategory(category, pageNumber);
+    await reRenderMidByCategory(category, pageNumber, signal);
     if (pageNumber === 1) setIsNoteLoading(false);
   };
 
   /* eslint-disable react-hooks/rules-of-hooks */
   const handleLoadMore = useCallback(() => {
+    console.log("run handle");
     if (!canLoadMore || isNoteLoading) return;
 
     if (folderId) getNotesById(folderId, currentPage + 1);
@@ -52,11 +61,12 @@ const NotesDetails = () => {
   }, [canLoadMore, isNoteLoading, folderId, category, currentPage]);
 
   useEffect(() => {
-    if (search)
-      reRenderBySearch(search); //TODO: add abortcontroller here too
-    else if (category)
-      getNotesByCategory(category); //TODO: add abortcontroller here too
-    else if (folderId) getNotesById(folderId, 1);
+    const controller = new AbortController();
+    if (search) reRenderBySearch(search);
+    else if (category) getNotesByCategory(category, 1, controller.signal);
+    else if (folderId) getNotesById(folderId, 1, controller.signal);
+
+    return () => controller.abort();
   }, [folderId, category, search]);
 
   useEffect(() => {
@@ -114,8 +124,12 @@ const NotesDetails = () => {
                   />
                 ))}
 
-                <div ref={loaderRef} className="py-2">
-                  {!hasMore && notesList.length > 0 && (
+                <div ref={loaderRef} className="py-5">
+                  {canLoadMore ? (
+                    <p className="text-xs text-background-700 text-center ">
+                      loading...
+                    </p>
+                  ) : (
                     <p className="text-xs text-background-700 text-center ">
                       All notes loaded
                     </p>

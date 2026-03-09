@@ -23,9 +23,14 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const reRenderMidById = useCallback(
-    async (folderId: string, pageNumber = 1) => {
+    async (folderId: string, pageNumber = 1, signal?: AbortSignal) => {
       try {
-        const { notes, total } = await getNotesByFolderId(folderId, pageNumber);
+        const { notes, total } = await getNotesByFolderId(
+          folderId,
+          pageNumber,
+          10,
+          signal,
+        );
 
         if (pageNumber === 1) {
           setNotesList(notes);
@@ -34,20 +39,27 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         }
 
         setTotalNotes(total);
-        setHasMore(notes.length === 10);
+        setHasMore(notes?.length === 10);
         setPage(pageNumber);
       } catch (e) {
-        if (e instanceof Error) toast.error(e.message);
-        else toast.error("Something went wrong");
+        if (e instanceof Error) {
+          if (e.message === "canceled") return;
+          toast.error(e.message);
+        } else toast.error("Something went wrong");
       }
     },
     [],
   );
 
   const reRenderMidByCategory = useCallback(
-    async (category: string, pageNumber = 1) => {
+    async (category: string, pageNumber = 1, signal?: AbortSignal) => {
       try {
-        const { notes, total } = await getNotesByCategory(category, pageNumber);
+        const { notes, total } = await getNotesByCategory(
+          category,
+          pageNumber,
+          10,
+          signal,
+        );
 
         if (pageNumber === 1) {
           setNotesList(notes);
@@ -56,11 +68,13 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
         }
 
         setTotalNotes(total);
-        setCategoryHasMore(notes.length === 10);
+        setCategoryHasMore(notes?.length === 10);
         setCategoryPage(pageNumber);
       } catch (e) {
-        if (e instanceof Error) toast.error(e.message);
-        else toast.error("something went wrong");
+        if (e instanceof Error) {
+          if (e.message === "canceled") return;
+          toast.error(e.message);
+        } else toast.error("Something went wrong");
       }
     },
     [],

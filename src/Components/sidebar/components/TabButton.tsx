@@ -40,7 +40,7 @@ const TabButton = ({
       return;
     }
 
-    if (input.trim() === label || input.trim().length === 0) {
+    if (input.trim() === label || input.trim()?.length === 0) {
       setInput(label);
       setEdit(false);
       return;

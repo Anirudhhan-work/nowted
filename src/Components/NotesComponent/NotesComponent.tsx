@@ -180,7 +180,7 @@ const NotesComponent = () => {
           className="text-3xl font-medium outline-none w-[90%]"
           value={singleNote.title}
           onChange={(e) => {
-            if (e.target.value.trim().length > 80) {
+            if (e.target.value.trim()?.length > 80) {
               toast.error("Title Should not be more than 80 character");
               return;
             }
