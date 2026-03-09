@@ -53,7 +53,6 @@ const NotesDetails = () => {
 
   /* eslint-disable react-hooks/rules-of-hooks */
   const handleLoadMore = useCallback(() => {
-    console.log("run handle");
     if (!canLoadMore || isNoteLoading) return;
 
     if (folderId) getNotesById(folderId, currentPage + 1);

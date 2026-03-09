@@ -43,7 +43,6 @@ export const getNotesByCategory = async (
   limit = 10,
   signal?: AbortSignal,
 ) => {
-  console.log("Hello");
   const res = await axiosInstance.get<NotesResType>("notes", {
     signal,
     params: {
