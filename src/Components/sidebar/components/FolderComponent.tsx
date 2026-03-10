@@ -57,7 +57,7 @@ const FolderComponent = () => {
         category === "s"
       )
     ) {
-      navigation(`/${firstFolder.name}/${firstFolder.id}`);
+      navigation(`/${encodeURIComponent(firstFolder.name)}/${firstFolder.id}`);
     }
   }, [folderList, folderName, category, navigation]);
 
