@@ -29,14 +29,16 @@ const NotesComponent = () => {
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let isFetching = true;
 
     const fetchSingeNote = async () => {
       if (!noteId) return toast.error("Something went wrong");
       setIsNotesLoading(true);
       setSingleNote(null);
       try {
-        const { note } = await getNoteById(noteId, controller.signal);
+        const { note } = await getNoteById(noteId);
+        if (!isFetching) return;
+
         setShowRestore(false);
         setSingleNote(note);
         if (!note.title) {
@@ -44,7 +46,6 @@ const NotesComponent = () => {
         }
       } catch (e) {
         if (e instanceof Error) {
-          // toast.error(typeof e + " ye de raha");
           if (e.message === "canceled") return;
           toast.error(e.message);
         } else {
@@ -56,15 +57,11 @@ const NotesComponent = () => {
     };
 
     fetchSingeNote();
-    return () => controller.abort();
+
+    return () => {
+      isFetching = false;
+    };
   }, [noteId]);
-
-  // const handleContentChange = useDebounce((value: string) => {
-  //   console.log("Test wokringn ");
-  //   setSingleNote((prev) => ({ ...prev!, content: value }));
-
-  //   toast.success("Updating");
-  // }, 1000);
 
   const handleContentChange = useDebounce(
     async (title: string, content: string) => {
