@@ -1,10 +1,10 @@
 import { Archive, Loader2, PackageOpen, Star, Trash } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { NoteContext } from "../../context/Notes/NoteContext";
 import toast from "react-hot-toast";
 import { patchNote } from "../../features/notes/NotesAPI";
 import ConfirmationModal from "./ConfirmationModal";
+import { useNotes } from "../../utils/hooks";
 
 const OpenModal = ({
   handleDelete,
@@ -50,13 +50,7 @@ const OpenModal = ({
     }
   };
 
-  const context = useContext(NoteContext);
-
-  if (!context) {
-    toast.error("Internal Issue");
-    return null;
-  }
-  const { reRenderMidById, reRenderMidByCategory } = context;
+  const { reRenderMidById, reRenderMidByCategory } = useNotes();
 
   const fetchPatchFavNote = async () => {
     try {
@@ -66,7 +60,6 @@ const OpenModal = ({
         await reRenderMidByCategory(category);
         if (category) navigate(`/${category}`);
       }
-      // else if (folderId) await reRenderMidById(folderId);
       toast.success(`Note marked as ${isFav ? "unfavorite" : "Favorite"}`);
     } catch (e) {
       if (e instanceof Error) {

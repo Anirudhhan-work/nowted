@@ -16,10 +16,8 @@ export const getNotesByFolderId = async (
   folderId: string,
   page = 1,
   limit = 10,
-  signal?: AbortSignal,
 ) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
-    signal,
     params: { folderId, page, limit },
   });
 
@@ -41,10 +39,8 @@ export const getNotesByCategory = async (
   category: string,
   page = 1,
   limit = 10,
-  signal?: AbortSignal,
 ) => {
   const res = await axiosInstance.get<NotesResType>("notes", {
-    signal,
     params: {
       [category]: true,
       page,

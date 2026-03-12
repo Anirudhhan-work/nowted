@@ -18,18 +18,17 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [categoryPage, setCategoryPage] = useState(1);
   const [categoryHasMore, setCategoryHasMore] = useState(true);
 
-  const setFolderListState = (folders: FolderType[]) => {
+  const setFolderListState = useCallback((folders: FolderType[]) => {
     setFolderList(folders);
-  };
+  }, []);
 
   const reRenderMidById = useCallback(
-    async (folderId: string, pageNumber = 1, signal?: AbortSignal) => {
+    async (folderId: string, pageNumber = 1) => {
       try {
         const { notes, total } = await getNotesByFolderId(
           folderId,
           pageNumber,
           10,
-          signal,
         );
 
         if (pageNumber === 1) {
@@ -52,13 +51,12 @@ export const NoteProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const reRenderMidByCategory = useCallback(
-    async (category: string, pageNumber = 1, signal?: AbortSignal) => {
+    async (category: string, pageNumber = 1) => {
       try {
         const { notes, total } = await getNotesByCategory(
           category,
           pageNumber,
           10,
-          signal,
         );
 
         if (pageNumber === 1) {

@@ -1,9 +1,8 @@
-import { useContext, useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import NotesCard from "./NotesCard";
-import toast from "react-hot-toast";
-import { NoteContext } from "../../../context/Notes/NoteContext";
 import NotesDetailsSkeleton from "../../skeleton/NotesDetailsSkeleton";
+import { useNotes } from "../../../utils/hooks";
 
 const NotesDetails = () => {
   const { folderId, folderName, category } = useParams();
@@ -12,9 +11,6 @@ const NotesDetails = () => {
   const search = searchParams.get("search") || "";
 
   const loaderRef = useRef<HTMLDivElement>(null);
-
-  const context = useContext(NoteContext);
-  if (!context) return toast.error("Some issue with the Note context");
 
   const {
     notesList,
@@ -26,47 +22,59 @@ const NotesDetails = () => {
     hasMore,
     categoryPage,
     categoryHasMore,
-  } = context;
+  } = useNotes();
 
-  const getNotesById = async (
-    folderId: string,
-    pageNumber = 1,
-    signal?: AbortSignal,
-  ) => {
-    if (pageNumber === 1) setIsNoteLoading(true);
-    await reRenderMidById(folderId, pageNumber, signal);
-    if (pageNumber === 1) setIsNoteLoading(false);
-  };
+  const getNotesById = useCallback(
+    async (folderId: string, pageNumber = 1) => {
+      if (pageNumber === 1) setIsNoteLoading(true);
+      await reRenderMidById(folderId, pageNumber);
+      if (pageNumber === 1) setIsNoteLoading(false);
+    },
+    [reRenderMidById],
+  );
 
   const canLoadMore = folderId ? hasMore : categoryHasMore;
   const currentPage = folderId ? page : categoryPage;
 
-  const getNotesByCategory = async (
-    category: string,
-    pageNumber = 1,
-    signal?: AbortSignal,
-  ) => {
-    if (pageNumber === 1) setIsNoteLoading(true);
-    await reRenderMidByCategory(category, pageNumber, signal);
-    if (pageNumber === 1) setIsNoteLoading(false);
-  };
+  const getNotesByCategory = useCallback(
+    async (category: string, pageNumber = 1) => {
+      if (pageNumber === 1) setIsNoteLoading(true);
+      await reRenderMidByCategory(category, pageNumber);
+      if (pageNumber === 1) setIsNoteLoading(false);
+    },
+    [reRenderMidByCategory],
+  );
 
-  /* eslint-disable react-hooks/rules-of-hooks */
   const handleLoadMore = useCallback(() => {
     if (!canLoadMore || isNoteLoading) return;
 
     if (folderId) getNotesById(folderId, currentPage + 1);
     else if (category) getNotesByCategory(category, currentPage + 1);
-  }, [canLoadMore, isNoteLoading, folderId, category, currentPage]);
+  }, [
+    canLoadMore,
+    isNoteLoading,
+    folderId,
+    category,
+    currentPage,
+    getNotesByCategory,
+    getNotesById,
+  ]);
 
   useEffect(() => {
     const controller = new AbortController();
     if (search) reRenderBySearch(search);
-    else if (category) getNotesByCategory(category, 1, controller.signal);
-    else if (folderId) getNotesById(folderId, 1, controller.signal);
+    else if (category) getNotesByCategory(category);
+    else if (folderId) getNotesById(folderId);
 
     return () => controller.abort();
-  }, [folderId, category, search]);
+  }, [
+    folderId,
+    category,
+    search,
+    getNotesByCategory,
+    getNotesById,
+    reRenderBySearch,
+  ]);
 
   useEffect(() => {
     if (!loaderRef.current) return;

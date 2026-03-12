@@ -3,11 +3,14 @@ import App from "./App.tsx";
 import "./App.css";
 import { ThemeProvider } from "./context/theme/ThemeState.tsx";
 import { NoteProvider } from "./context/Notes/NoteState.tsx";
+import { StrictMode } from "react";
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <NoteProvider>
-      <App />
-    </NoteProvider>
-  </ThemeProvider>,
+  <StrictMode>
+    <ThemeProvider>
+      <NoteProvider>
+        <App />
+      </NoteProvider>
+    </ThemeProvider>
+  </StrictMode>,
 );

@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import { useContext } from "react";
+import { NoteContext } from "../context/Notes/NoteContext";
 
 export const useDebounce = <T>(
   callback: (...args: T[]) => void,
@@ -13,4 +15,14 @@ export const useDebounce = <T>(
       callback(...args);
     }, time);
   };
+};
+
+export const useNotes = () => {
+  const context = useContext(NoteContext);
+
+  if (!context) {
+    throw new Error("something went wrong");
+  }
+
+  return context;
 };

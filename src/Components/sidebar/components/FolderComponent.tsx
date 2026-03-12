@@ -1,11 +1,11 @@
 import { Folder, FolderOpen, FolderPlus } from "lucide-react";
 import TabButton from "./TabButton";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFolder, getFolders } from "../../../features/folders/folderAPI";
 import TabButtonSkeleton from "../../skeleton/TabButtonSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { NoteContext } from "../../../context/Notes/NoteContext";
+import { useNotes } from "../../../utils/hooks";
 
 const FolderComponent = () => {
   const [isFolderLoading, setIsFolderLoading] = useState(false);
@@ -13,16 +13,8 @@ const FolderComponent = () => {
   const navigation = useNavigate();
   const { folderName, category } = useParams();
 
-  const context = useContext(NoteContext);
+  const { folderList, setFolderListState } = useNotes();
 
-  if (!context) {
-    toast.error("Internal Issue");
-    return null;
-  }
-
-  const { folderList, setFolderListState } = context;
-
-  /* eslint-disable react-hooks/rules-of-hooks */
   const fetchFolders = useCallback(async () => {
     setIsFolderLoading(true);
     try {
@@ -37,7 +29,7 @@ const FolderComponent = () => {
     } finally {
       setIsFolderLoading(false);
     }
-  }, []);
+  }, [setFolderListState]);
 
   useEffect(() => {
     fetchFolders();

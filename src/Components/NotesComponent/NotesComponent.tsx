@@ -1,5 +1,5 @@
 import { CalendarDays, Ellipsis, Folder, Loader2 } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -11,8 +11,7 @@ import {
 import { type NotesType } from "../../features/notes/type";
 import OpenModal from "../modal/OpenModal";
 import RestoreComponent from "./components/RestoreComponent";
-import { useDebounce } from "../../utils/hooks";
-import { NoteContext } from "../../context/Notes/NoteContext";
+import { useDebounce, useNotes } from "../../utils/hooks";
 import ConfirmationModal from "../modal/ConfirmationModal";
 import NotesSkeleton from "../skeleton/NotesSkeleton";
 
@@ -147,14 +146,7 @@ const NotesComponent = () => {
       }
     }
   };
-
-  const context = useContext(NoteContext);
-
-  if (!context) {
-    toast.error("Internal Issue");
-    return null;
-  }
-  const { reRenderMidById, reRenderMidByCategory, folderList } = context;
+  const { reRenderMidById, reRenderMidByCategory, folderList } = useNotes();
 
   if (!noteId) return null;
 
